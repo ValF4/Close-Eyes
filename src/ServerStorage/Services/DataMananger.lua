@@ -20,6 +20,7 @@ local profileTemplate:ProfileType = {
 	Gems = 0,
 	XP = 0,
 	Inventory = {},
+	Config = {},
 }	
 
 local function TableClone(original)
@@ -58,7 +59,7 @@ end
 local function onPlayerRemoving(player)
 	
 	local profile = profiles[player.UserId]
-	print(profile.Data)
+
 	if profile then
 		profile:Release() -- Libera a data para poder carregar em outros servidores
 	end
@@ -75,7 +76,7 @@ function module:GetData(player): {any}
 		
 		if profile then break end
 		
-		task.wait(0.4)
+		task.wait(.4)
 	end
 	
 	if profile then

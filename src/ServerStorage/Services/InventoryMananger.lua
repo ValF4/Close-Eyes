@@ -40,7 +40,6 @@ end
 
 function PlayerRemoving(Player)
 	GI[Player.UserId] = nil
-	print(GI[Player.UserId])
 end
 
 function module:GetInventory(Player:Player|number)
