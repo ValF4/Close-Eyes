@@ -32,7 +32,7 @@ local function ChekingGuiInScreem(Player: Player, InGui: string)
 
 end
 
-function EffectControler.BlueControler(Player: Player, InGui: String, State: boolean)
+function EffectControler.BlueControler(Player: Player, InGui: string, State: boolean)
 	if db[Player.UserId] and tick() - db[Player.UserId] < .4 then return end db[Player.UserId] = tick()
 
 	local ResponseCheskingGui = ChekingGuiInScreem(Player, InGui)

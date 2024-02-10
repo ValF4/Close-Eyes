@@ -1,3 +1,4 @@
+-- Create script for HeroGames
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer: Player = Players.LocalPlayer
@@ -35,8 +36,6 @@ function Module:NewGui(screengui:ScreenGui)
 	
 	return setmetatable(templateGuiInfo,GuiMetodos)
 end
-
-
 function Module:Init()
 	for _,Screengui: ScreenGui in LocalPlayer.PlayerGui:GetChildren() do
 		ScreenGuis[Screengui.Name] = self:NewGui(Screengui)

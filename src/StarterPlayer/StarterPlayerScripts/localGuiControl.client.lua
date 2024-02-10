@@ -12,7 +12,7 @@ local playerGui: PlayerGui = Player.PlayerGui
 GuiControl:Init(Player)
 
 LobbyShopFire:Connect(function(Prl: Player): ()
-	print("Part 2")
+	print("Agora fui conectato")
 	GuiControl.OpenShopinMark(Player)
 end)
 
