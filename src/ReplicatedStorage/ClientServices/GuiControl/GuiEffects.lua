@@ -1,47 +1,46 @@
-local EffectControler = {} 
-
-EffectControler.GuiEvent = function() return end 
+local EffectControler = {}
 
 local TweenService = game:GetService("TweenService")
 
-local BlurEffect: BlurEffect = game:GetService("Lighting"):WaitForChild("Blur") 
+local BlurEffect: BlurEffect = game:GetService("Lighting"):WaitForChild("Blur")
+local PlayerCamera: Camera = workspace.CurrentCamera
 
-local DefaltBlurAnimation: TweenInfo = TweenInfo.new(.1, Enum.EasingStyle.Linear)
+local DefaltTweenAnimation: TweenInfo = TweenInfo.new(.1, Enum.EasingStyle.Linear)
 
-local CreateBlurAnimation: Tween = TweenService:Create(BlurEffect, DefaltBlurAnimation, {Size = 24}) -- funciona
-local RemoveBlur: Tween = TweenService:Create(BlurEffect, DefaltBlurAnimation, {Size = 0})
+local CreateBlurAnimation: Tween = TweenService:Create(BlurEffect, DefaltTweenAnimation, {Size = 24}) -- funciona
+local RemoveBlur: Tween = TweenService:Create(BlurEffect, DefaltTweenAnimation, {Size = 0})
+
+local AddFog: Tween = TweenService:Create(PlayerCamera, DefaltTweenAnimation, {FieldOfView = 85})
+local RemoveFog: Tween = TweenService:Create(PlayerCamera, DefaltTweenAnimation, {FieldOfView = 70})
 
 local db: {} = {}
 
-function EffectControler:Init(Event)
-	self.GuiEvent = Event 
-end
-
-local function ChekingGuiInScreem(Player: Player, InGui: string)
-
-	if InGui == nil or InGui == "" then return true end
-
-	local PlayerGui: PlayerGui = Player.PlayerGui or Player:WaitForChild("PlayerGui")
-	local gameGuis: Folder = PlayerGui:WaitForChild("GAME_GUIS") 
-
-	for _, ScreemName in gameGuis:GetChildren() do
-		if tostring(ScreemName) == InGui then
-			return EffectControler.GuiEvent(ScreemName)
-		end 
-	end 
-
-end
-
-function EffectControler.BlueControler(Player: Player, InGui: string, State: boolean)
-	if db[Player.UserId] and tick() - db[Player.UserId] < .4 then return end db[Player.UserId] = tick()
-
-	local ResponseCheskingGui = ChekingGuiInScreem(Player, InGui)
-
-	if not State and not ResponseCheskingGui then
+local function BLurControler(State: boolean): ()
+	if not State then
 		RemoveBlur:Play()
 	else
-		CreateBlurAnimation:Play()	
+		CreateBlurAnimation:Play()
 	end
-end 
+end
+
+local function FogControler(State: boolean): ()
+	if not State then
+		RemoveFog:Play()
+	else
+		AddFog:Play()
+	end
+end
+
+function EffectControler.Controler(Player: Player?, State: boolean): ()
+	if db[Player.UserId] and tick() - db[Player.UserId] < .4 then return end db[Player.UserId] = tick()
+
+	if not State then
+		BLurControler(false)
+		FogControler(false)
+	else
+		BLurControler(true)
+		FogControler(true)
+	end
+end
 
 return EffectControler

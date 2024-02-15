@@ -9,8 +9,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Marks: Folder = workspace:WaitForChild("Markers") 
 
-local Shoplist = require(script.ShopList)	
+local Shoplist = require(script.Parent.ShopList)	
 local GuiControl = require(ReplicatedStorage.ClientServices.GuiControl)
+local BlueControler = require(ReplicatedStorage.ClientServices.GuiControl.GuiEffects)
 
 local function ConectionMarks(PartName: BasePart, Part: Part)
 	local FindPlayer = PartName.Parent
@@ -26,19 +27,14 @@ local function ConectionMarks(PartName: BasePart, Part: Part)
 end
 
 local function LeaveMark(OtherPart: BasePart)
+	local GetPlayer = Players:GetPlayerFromCharacter(OtherPart.Parent)
 	table.remove(PlayersPart, table.find(PlayersPart, OtherPart))
 	if #PlayersPart <= 0 then
 		if not db then return end
-		GuiControl.RemoveGuiInScreem()
+			--BlueControler.BlueControler(GetPlayer, "ShopGui", false)
 		db = false
 	end
 end
-
---local function depurefunc()
---	while true do task.wait(1)
---		print(PlayersPart)
---	end
---end
 
 function InitShopSystem.InitShop(): ()
 	for Index, Mark in Marks:GetChildren() do

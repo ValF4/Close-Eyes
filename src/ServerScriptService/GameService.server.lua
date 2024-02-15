@@ -3,7 +3,7 @@ local ServerStorage =  game:GetService("ServerStorage")
 local Players = game:GetService("Players")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
-local InitShopService = require(ReplicatedStorage.GameServices.InitShop)
+local InitShopService = require(ReplicatedStorage.GameServices.InitShop.Marksinit)
 local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 local DataManager = require(ServerStorage.Services.DataMananger)
 

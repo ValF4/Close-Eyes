@@ -9,7 +9,6 @@ local TestShopFire = Bridgnet2.ReferenceBridge("TesteShop")
 local ShopList: {} = {
 	["LobbyShop"] = function(Character)
 		local GetPlayer = Players:GetPlayerFromCharacter(Character)
-		print("Cheguei aqui")
 		if not GetPlayer then return end
 		LobbyShopFire:Fire(GetPlayer, GetPlayer)
 	end,

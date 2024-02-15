@@ -2,71 +2,65 @@ local ReplicatedStore = game:GetService("ReplicatedStorage")
 
 local EffectControler = require(script.GuiEffects)
 
-local InGui: string = "ShopGui"
+local InGui: string = nil
 
-local GuiControl: {} = {}
+local GuiControl = {}
+
+local function ChargedGui(): ()
+	return
+end
+
+local function HudControler(Player: Player, State: boolean): ()
+	local PlayerGui: PlayerGui = Player.PlayerGui or Player:WaitForChild("PlayerGui")
+	local Hud: ScreenGui = PlayerGui:WaitForChild("Hud",3) or PlayerGui.Hud
+
+	if State then
+		Hud.Enabled = false
+	else
+		Hud.Enabled = true
+	end
+end
+
+local function RemoveGui(): ()
+	InGui = nil
+	return
+end
+
+local function InitGui(Player: Player, CallGui: string): ()
+	if not CallGui then return end
+
+	if InGui and InGui ~= CallGui then ChargedGui() end
+
+	if InGui == CallGui then EffectControler.Controler(Player, false) RemoveGui() return end
+
+	--HudControler(Player, true)
+	EffectControler.Controler(Player, true)
+	InGui = CallGui
+end
 
 local HudBottons = {
-	["InventoryBottom"]	=	function(Player) EffectControler.BlueControler(Player, InGui, true) InventoryHud(Player) end,
-	["ConfigBottom"] 	=	function(Player) EffectControler.BlueControler(Player, InGui, true) ConfigHud(Player) end,
-	["CreditBottom"] 	=	function(Player) EffectControler.BlueControler(Player, InGui, true) CreditHud(Player) end,
-	["CodeBottom"] 	=	function(Player) EffectControler.BlueControler(Player, InGui, true) CodeHud(Player) end,
-	["ShopBottom"] 	=	function(Player) EffectControler.BlueControler(Player, InGui, true) Shop(Player) end,
+	["InventoryBottom"]	= function(Player: Player)
+		InitGui(Player, "InventoryGui")
+	end,
+
+	["ConfigBottom"] 	=	function(Player)
+		 InitGui(Player, "ConfigGui")
+	end,
+
+	["CreditBottom"] 	=	function(Player)
+		 InitGui(Player, "CreditGui")
+	end,
+
+	["CodeBottom"] 		=	function(Player)
+		InitGui(Player, "CodeGui")
+	end,
+
+	["ShopBottom"] 		=	function(Player)
+		InitGui(Player, "ShopGui")
+	end
 }
 
-function ConfigHud(Player: Player) 
-	
-	InGui = "ConfigGui"
-	print("Agora sou a: ConfigGui" )
-
-	return
-end
-
-function CreditHud(Player: Player)
-	return
-end
-
-function CodeHud(Player: Player)
-	return
-end
-
-function InventoryHud(Player: Player)
-	return
-end	
-
-function Shop(Player: Player)
-	
-	return print("Entrei aqui")
-end
-
-function GuiControl.RemoveGuiInScreem (ScreemName: ScreenGui?): ()
-	if not ScreemName or ScreemName == "" then 
-		
-		print("Irei remover a GUI: " ..tostring(InGui).. " da sua tela.")
-		InGui = "" or nil
-		
-		return true
-		
-		else
-		
-		print("Irei remover a GUI: " ..tostring(ScreemName).. " da sua tela.")
-		InGui = "" or nil
-
-		return true
-	end
-
-end
-
-function GuiControl.OpenShopinMark(Player: Player)
-	if InGui == "ShopGui" then return end
-	InGui = "ShopGui"
-	print("Teste")
-	EffectControler.BlueControler(Player, InGui, true)
-	Shop(Player)
-end
-
 function GuiControl:Init(Player: Player): ()
-	EffectControler:Init(self.RemoveGuiInScreem)
 	local PlayerGui: PlayerGui = Player.PlayerGui or Player:WaitForChild("PlayerGui")
 	local hud: ScreenGui = PlayerGui:WaitForChild("Hud",3) or PlayerGui.Hud
 
@@ -74,7 +68,7 @@ function GuiControl:Init(Player: Player): ()
 
 	local function directionGui(Name: string): ()
 		for index: string?, func in HudBottons do
-			if Name == index then func(Player) end 
+			if Name == index then func(Player) end
 		end
 	end
 
@@ -84,7 +78,6 @@ function GuiControl:Init(Player: Player): ()
 			directionGui(bottom.Name)
 		end)
 	end
-
 end
 
 return GuiControl
