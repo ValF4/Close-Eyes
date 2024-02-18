@@ -6,6 +6,7 @@ local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local InitShopService = require(ReplicatedStorage.GameServices.InitShop.Marksinit)
 local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 local DataManager = require(ServerStorage.Services.DataMananger)
+local InitCharacterControler = require(ReplicatedStorage.ClientServices.CharacterControler.InitCharacterControler)
 
 local LobbyShopFire = Bridgnet2.ServerBridge("LobbyShop")
 local TestShopFire = Bridgnet2.ServerBridge("TesteShop")

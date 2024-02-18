@@ -8,7 +8,7 @@ local EffectControler = require(script.GuiEffects)
 
 local InGui: string = nil
 
-local GuiControl = {}
+local GuiControl: {} = {}
 
 local function OpenGui(Player: Player, Gui: string, CodePosition: UDim2): ()
 	if not Player or not Gui then return end
@@ -35,7 +35,7 @@ local function OpenGui(Player: Player, Gui: string, CodePosition: UDim2): ()
 
 end
 
-local function HudControler(Player: Player, State: boolean): ()
+function GuiControl.HudControler(Player: Player, State: boolean): ()
 	if not Player or State == nil then return end
 
 	local PlayerGui: PlayerGui = Player.PlayerGui
@@ -63,7 +63,7 @@ local function RemoveGui(Player: Player ,FindGui: ScreenGui): ()
 		ClosedGuiAnimation:Play()
 		ClosedGuiAnimation.Completed:Wait()
 		EffectControler.Controler(Player, false)
-		HudControler(Player, false)
+		GuiControl.HudControler(Player, false)
 		GetScreemGui.Enabled = false
 		InGui = nil
 		return
@@ -76,11 +76,10 @@ local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
 	if not CallGui then return end
 
 	OpenGui(Player, CallGui, Position)
-	HudControler(Player, true)
+	GuiControl.HudControler(Player, true)
 	EffectControler.Controler(Player, true)
 	RemoveGui(Player, CallGui)
 	InGui = CallGui
-
 end
 
 local HudBottons = {
