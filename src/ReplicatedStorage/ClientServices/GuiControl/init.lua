@@ -88,11 +88,11 @@ local HudBottons = {
 	end,
 
 	["ConfigBottom"] 	=	function(Player)
-		 InitGui(Player, "ConfigGui")
+		 InitGui(Player, "ConfigGui", UDim2.fromScale(0.5, 0.5))
 	end,
 
 	["CreditBottom"] 	=	function(Player)
-		 InitGui(Player, "CreditGui")
+		 InitGui(Player, "CreditGui", UDim2.fromScale(0.5, 0.5))
 	end,
 
 	["CodeBottom"] 		=	function(Player: Player)
@@ -100,7 +100,7 @@ local HudBottons = {
 	end,
 
 	["ShopBottom"] 		=	function(Player)
-		InitGui(Player, "ShopGui")
+		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
 	end
 }
 
