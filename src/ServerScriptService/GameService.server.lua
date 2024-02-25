@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local CharacterControler = require(ServerScriptService.PlayerControlers.CharacterControler)
-local InitMarksServices = require(ReplicatedStorage.GameServices.MarksInit.InitMarksModule)
+local InitMarksServices = require(ServerScriptService.MarkesControlers.InitMarksModule)
 local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 local DataManager = require(ServerStorage.Services.DataMananger)
 

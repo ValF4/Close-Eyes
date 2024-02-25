@@ -6,10 +6,11 @@ local db: boolean = false
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local InitGameMarks: Folder = workspace:WaitForChild("InitGameMarks", 5)
 
-local ServerControlerModule = require(ReplicatedStorage.GameServices.MarksInit.ServerControlerModule)
+local ServerControlerModule = require(ServerScriptService.MarkesControlers.ServerControlerModule)
 local GuiControl = require(ReplicatedStorage.ClientServices.GuiControl)
 local BlueControler = require(ReplicatedStorage.ClientServices.GuiControl.GuiEffects)
 
@@ -22,7 +23,7 @@ local function ConectionMarks(PartName: BasePart, Part: Part)
 		if db then return end
 		print("Adicionei o player")
 		db = true
-		ServerControlerModule.AddPlayerList(GetPlayer)
+		--ServerControlerModule.AddPlayerList(GetPlayer)
     end
 end
 
@@ -33,7 +34,7 @@ local function LeaveMark(OtherPart: BasePart)
 	if #PlayersPart <= 0 then
 		if not db then return end
 		print("Removi o player")
-        ServerControlerModule.RemovePlayerList()
+        --ServerControlerModule.RemovePlayerList()
 		db = false
 	end
 end
