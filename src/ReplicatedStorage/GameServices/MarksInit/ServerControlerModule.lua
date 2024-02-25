@@ -1,3 +1,4 @@
+local ShopList = {}
 --local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --local Players = game:GetService("Players")
 --
@@ -14,4 +15,4 @@
 --	end,
 --}
 --
---return ShopList
+return ShopList
