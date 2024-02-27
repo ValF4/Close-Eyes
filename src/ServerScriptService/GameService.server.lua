@@ -9,7 +9,6 @@ local InitMarksServices = require(ServerScriptService.MarkesControlers.InitMarks
 local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 local DataManager = require(ServerStorage.Services.DataMananger)
 
---local InitGameServiceEvent = Bridgnet2.ServerBridge("InitGameService")
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
 
@@ -19,7 +18,6 @@ CharacterControler.InitControlers()
 
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3) CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterControler.AnchoredCharacterControler(Player, State) end)
---InitGameServiceEvent:Connect(function(Player: Player) CharacterControler.Init(Player) end)
 
 --local Variavel = Bridgnet2.ServerBridge("NOMEDOREMOTE")
 
