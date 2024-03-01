@@ -5,6 +5,8 @@ local Players = game:GetService("Players")
 
 local BillBordControl = require(ReplicatedStorage.GuiModuleControler.BillBordControl)
 
+local MaxPlayers: number = 8
+
 local allMarkes = {
     Mark_1 = {},
     Mark_2 = {},
@@ -16,6 +18,8 @@ function ServerControlerModule.ListControler(Player: Player, Marker: Part, Optio
 
     local markerTable = allMarkes[Marker.Parent.Name]
     
+    if not markerTable or #markerTable == MaxPlayers then return warn("Funcione") end
+
     if Option == "ADD" then
         if table.find(markerTable, Player) then return end
 
