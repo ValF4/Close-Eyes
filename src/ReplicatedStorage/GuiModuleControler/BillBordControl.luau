@@ -1,6 +1,31 @@
 local BillBordControl = {}
 
-local MaxPlayers: number = 8
+local MaxPlayers: number = 1
+local MaxTemp: number = 120
+local MinTemp: number = 10
+
+function timer(TextEdit: TextLabel, TotalInMarker: number)
+    if not TextEdit or not TotalInMarker then return end
+	
+    if TotalInMarker == MaxPlayers then
+        for TimeLeft: number = MinTemp, 0, -1 do
+            TextEdit.Text = "Iniciando em: " ..string.format("%02d : %02d", math.floor(TimeLeft / 60), math.floor(TimeLeft % 60))
+            if TimeLeft == 0 then
+                print("Partida iniciada")
+            end
+            task.wait(1)
+        end
+    else
+        for TimeLeft: number = MaxTemp, 0, -1 do
+            TextEdit.Text = "Iniciando em: " ..string.format("%02d : %02d", math.floor(TimeLeft / 60), math.floor(TimeLeft % 60))
+            if TimeLeft == 0 then
+                print("Partida iniciada")
+            end
+            task.wait(1)
+        end
+    end
+end
+
 
 function BillBordControl.ViewPortControler(MarkParent: Model ,Value: number): ()
     if not MarkParent or not Value then
@@ -13,6 +38,7 @@ function BillBordControl.ViewPortControler(MarkParent: Model ,Value: number): ()
             local GetTotalPlatersText: TextLabel = GetBillBord.Frame.TotalPlayer
 
             GetTotalPlatersText.Text = "0/"..MaxPlayers
+            timer(GetTimerText, Value)
         end
     else
         local GetBillBord: BillboardGui = MarkParent.ViewPort.BillboardGui
@@ -24,8 +50,8 @@ function BillBordControl.ViewPortControler(MarkParent: Model ,Value: number): ()
     
         if not GetTimerText or not GetTotalPlatersText then return warn("ERROR - Not find GetTimer our TotalPlayerText.") end
     
-        print(Value)
         GetTotalPlatersText.Text = Value.."/"..MaxPlayers
+        timer(GetTimerText, Value)
     end
 end
 
