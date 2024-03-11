@@ -1,14 +1,18 @@
 local BillBordControl = {}
 
-local MaxPlayers: number = 1
+local BreakConter: boolean
+
+local MaxPlayers: number = 8
 local MaxTemp: number = 120
 local MinTemp: number = 10
 
 function timer(TextEdit: TextLabel, TotalInMarker: number)
     if not TextEdit or not TotalInMarker then return end
-	
+
     if TotalInMarker == MaxPlayers then
         for TimeLeft: number = MinTemp, 0, -1 do
+            print(TotalInMarker)
+            if TotalInMarker == 0 then break end
             TextEdit.Text = "Iniciando em: " ..string.format("%02d : %02d", math.floor(TimeLeft / 60), math.floor(TimeLeft % 60))
             if TimeLeft == 0 then
                 print("Partida iniciada")
@@ -17,6 +21,13 @@ function timer(TextEdit: TextLabel, TotalInMarker: number)
         end
     else
         for TimeLeft: number = MaxTemp, 0, -1 do
+            if TotalInMarker == 0 then
+                BreakConter = true
+                TextEdit.Text = "Iniciando em: Aguardando jogadores"
+                break
+            end
+            if BreakConter then BreakConter = false return end
+            if TotalInMarker == 0 then TextEdit.Text = "Aguardando jogadores" return end
             TextEdit.Text = "Iniciando em: " ..string.format("%02d : %02d", math.floor(TimeLeft / 60), math.floor(TimeLeft % 60))
             if TimeLeft == 0 then
                 print("Partida iniciada")
