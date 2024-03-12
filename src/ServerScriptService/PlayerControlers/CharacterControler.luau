@@ -7,11 +7,17 @@ local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local InitCharacterControler = {}
 
 function InitCharacterControler.TeleportService(Player: Player, cord: Vector3): ()
-    if not Player or not cord then return end
+    if not cord then
+        if not Player then return end
 
-	local Character = Player.Character
+        local GetCharacter = Player.Character
+
+        --Character:MoveTo(Vector3.new(cord.X, cord.Y, cord.Z)) -- TODO - Get cord in the teleportScritpService
+    else
+        local Character = Player.Character
 --
-	Character:MoveTo(Vector3.new(cord.X, cord.Y, cord.Z))
+	    Character:MoveTo(Vector3.new(cord.X, cord.Y, cord.Z))
+    end
 
 end
 
