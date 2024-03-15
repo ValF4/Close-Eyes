@@ -2,11 +2,13 @@ local Player: Player = game:GetService("Players").LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
+local HudModule = require(script.Parent.HudModule.HudModule)
 local GuiControl = require(ReplicatedStorage.ClientServices.GuiControl)
 
 local playerGui: PlayerGui = Player.PlayerGui
 
 GuiControl:Init(Player)
+HudModule:init(Player)
 
 --local filterObjects = {}
 --local boxPosition = CFrame.new(0,0,0)
