@@ -12,6 +12,7 @@ local DataManager = require(ServerStorage.Services.DataMananger)
 
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
+local GetInventory = Bridgnet2.ServerBridge("GetInventory")
 
 DataManager.Init()
 InitMarksServices.InitMarks()
@@ -20,7 +21,7 @@ BillBordControl:ViewPortControler()
 
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3) CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterControler.AnchoredCharacterControler(Player, State) end)
-
+GetInventory:Connect(function(Player: Player) return end) -- TODO Revisão
 --local Variavel = Bridgnet2.ServerBridge("NOMEDOREMOTE")
 
 --Variavel.Fire("Player",local content = {contente1,content2})

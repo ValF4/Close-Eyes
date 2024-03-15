@@ -2,7 +2,7 @@ local HudModule = {}
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local GuiUpgrade = require(ReplicatedStorage.ClientServices.GuiControl.GuiUpgrade)
+local GuiUpgrade = require(ReplicatedStorage.ClientServices.ClientDataManager.DataClient)
 
 function HudModule:init(Player)
     if not Player then return end
@@ -19,7 +19,7 @@ function HudModule:init(Player)
 
     if not GemsText or not MoneyText then return end
 
-    GuiUpgrade.UpgradeHud(Player)
+    print(GuiUpgrade.GetData(Player))
 end
 
 return HudModule
