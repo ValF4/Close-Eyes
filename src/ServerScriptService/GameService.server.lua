@@ -21,7 +21,9 @@ BillBordControl:ViewPortControler()
 
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3) CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterControler.AnchoredCharacterControler(Player, State) end)
-GetInventory:Connect(function(Player: Player) return end) -- TODO Revisão
+GetInventory.OnServerInvoke = function(Player: Player)
+    return InventoryMananger:GetInventory(Player)
+end
 --local Variavel = Bridgnet2.ServerBridge("NOMEDOREMOTE")
 
 --Variavel.Fire("Player",local content = {contente1,content2})
