@@ -5,6 +5,7 @@ local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local dataClient = {}
 
 local GetInventory = Bridgnet2.ReferenceBridge("GetInventory")
+--local UpgradeHud = Bridgnet2.ReferenceBridge("UpgradeHud")
 
 function dataClient.GetData(Player: Player)
     if not Player then return warn("Invalid Player") end
@@ -13,5 +14,9 @@ function dataClient.GetData(Player: Player)
 
     return GetData
 end
+
+--function dataClient.upgradeData()
+--    UpgradeHud:Fire()
+--end
 
 return dataClient

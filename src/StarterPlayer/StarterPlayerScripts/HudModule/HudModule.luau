@@ -1,6 +1,9 @@
 local HudModule = {}
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
+
+local UpgradeHud = Bridgnet2.ServerBridge("UpgradeHud")
 
 local GuiUpgrade = require(ReplicatedStorage.ClientServices.ClientDataManager.DataClient)
 
@@ -19,7 +22,16 @@ function HudModule:init(Player)
 
     if not GemsText or not MoneyText then return end
 
-    print(GuiUpgrade.GetData(Player))
+    local PlayerData = GuiUpgrade.GetData(Player)
+
+    MoneyText.Text = "Coins: " ..PlayerData.Coins
+    GemsText.Text = "Gems: " ..PlayerData.Gems
 end
+
+--function HudModule:UpgradeHud(Player: Player)
+--    UpgradeHud:init(Player)
+--end
+--
+--UpgradeHud:Connect(function(Player) HudModule:UpgradeHud() end)
 
 return HudModule
