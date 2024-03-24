@@ -22,8 +22,6 @@ function HudModule:init(Player)
 
     local PlayerData = GuiUpgrade.GetData(Player)
 
-    while PlayerData do task.wait() if not PlayerData then return end break end
-
     MoneyText.Text = "Coins: " ..PlayerData.Coins
     GemsText.Text = "Gems: " ..PlayerData.Gems
 end

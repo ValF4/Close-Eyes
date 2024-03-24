@@ -6,12 +6,8 @@ local dataClient = {}
 
 local GetInventory = Bridgnet2.ReferenceBridge("GetInventory")
 
-function dataClient.GetData(Player: Player)
-    if not Player then return end
-
-    local GetData = GetInventory:InvokeServerAsync()
-
-    return GetData
+function dataClient.GetData()
+    return GetInventory:InvokeServerAsync()
 end
 
 return dataClient

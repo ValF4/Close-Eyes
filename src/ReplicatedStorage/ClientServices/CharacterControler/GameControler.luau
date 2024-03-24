@@ -4,7 +4,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 
 local AnchoredPlayerEvent = Bridgnet2.ReferenceBridge("AnchoredPlayer")
-local GameStart = Bridgnet2.ReferenceBridge("GameStart")
 
 local GameControler = {}
 
@@ -22,7 +21,6 @@ function GameControler.CheckingAtributes(LocalPlayer: Player): ()
                 }
                 
                 AnchoredPlayerEvent:Fire(Content)
-                GameStart:Fire()
                 break
             end
         end
