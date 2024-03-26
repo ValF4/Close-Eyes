@@ -7,6 +7,8 @@ local AnchoredPlayerEvent = Bridgnet2.ReferenceBridge("AnchoredPlayer")
 
 local GameControler = {}
 
+local InLoaded = true
+
 function GameControler.CheckingAtributes(LocalPlayer: Player): ()
 	local InitThread: thread = task.spawn(function()
         while task.wait() do

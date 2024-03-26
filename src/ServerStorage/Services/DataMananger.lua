@@ -6,12 +6,13 @@ local ProfileService = require(ServerStorage.ServerPackages.ProfileService)
 
 local module = {}
 
-export type ProfileType= {
+export type ProfileType = {
 	Coins:number,
 	Level:number,
 	Gems:number,
 	XP:number,
-	Inventory:{[string]:{}}
+	Inventory:{[string]:{}},
+	Config:{Version: string, VolumeMusic: number, AmbientVolume: number}
 }
 
 local profileTemplate:ProfileType = {
@@ -20,7 +21,11 @@ local profileTemplate:ProfileType = {
 	Gems = 0,
 	XP = 0,
 	Inventory = {},
-	Config = {},
+	Config = {
+		Version = "",
+		VolumeMusic = 100,
+		AmbientVolume = 100,
+	},
 }	
 
 local function TableClone(original)
@@ -35,7 +40,7 @@ local function TableClone(original)
 end
 
 --game:GetService("DataStoreService"):GetDataStore("playerData")
-local profileStore = ProfileService.GetProfileStore("TesteData", profileTemplate)
+local profileStore = ProfileService.GetProfileStore("PlayerProfileData", profileTemplate)
 
 function onPlayerAdded(player)
 	

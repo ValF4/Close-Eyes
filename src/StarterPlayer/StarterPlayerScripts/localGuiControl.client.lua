@@ -1,17 +1,15 @@
 local Player: Player = game:GetService("Players").LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerScript: PlayerScripts = Player.PlayerScripts
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
-local HudModule = require(script.Parent.HudModule.HudModule)
 local GuiControl = require(ReplicatedStorage.ClientServices.GuiControl)
+local HudModule = require(PlayerScript.GuisModules.HudModule)
+local UpgradeGui = require(PlayerScript.GuisModules.UpgradeGui)
 
-GuiControl:Init(Player)
+local exchangeVersion = Bridgnet2.ClientBridge("exchangeVersion")
+
+GuiControl:init(Player)
 HudModule:init(Player)
 
---local filterObjects = {}
---local boxPosition = CFrame.new(0,0,0)
---local boxSize = Vector3.new(80,80,80)
---local maxObjectsAllowed = 10
---local params = OverlapParams.new(filterObjects,Enum.RaycastFilterType.Exclude,maxObjectsAllowed,"Default")
---local objectsInSpace = workspace:GetPartBoundsInBox(boxPosition,boxSize,params)
---print(#objectsInSpace)
+exchangeVersion:Connect(function(Version: string) UpgradeGui.InitGui(Version) end)

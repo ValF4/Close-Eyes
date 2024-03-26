@@ -4,18 +4,16 @@ local ServerStorage =  game:GetService("ServerStorage")
 local Players = game:GetService("Players")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
-local UpgradeGui = require(ReplicatedStorage.ClientServices.GuiControl.UpgradeGui)
+local ChekingUpgrade = require(ServerScriptService.PlayerControlers.CheckingUpgrade)
 local BillBordControl = require(ReplicatedStorage.GuiModuleControler.BillBordControl)
 local CharacterControler = require(ServerScriptService.PlayerControlers.CharacterControler)
 local InitMarksServices = require(ServerScriptService.MarkesControlers.InitMarksModule)
-local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 local DataManager = require(ServerStorage.Services.DataMananger)
-local AtributeServices = require(ServerScriptService.ServicesModules.AtributeService)
+local DataControler = require(ServerScriptService.PlayerControlers.DataControler)
 
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
-local GetInventory = Bridgnet2.ServerBridge("GetInventory")
-local CheckingAtribute = Bridgnet2.ServerBridge("CheckingAtribute")
+--local SaveData = Bridgnet2.ServerBridge("SaveData")
 
 DataManager.Init()
 InitMarksServices.InitMarks()
@@ -25,10 +23,10 @@ BillBordControl:ViewPortControler()
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3) CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterControler.AnchoredCharacterControler(Player, State) end)
 
-CheckingAtribute.OnServerInvoke = function(Player: Player, AtributeName: string) return ServerStorage.serverInfo:GetAttribute("Version") end
-GetInventory.OnServerInvoke = function(Player: Player)
-    return InventoryMananger:GetInventory(Player)
-end
+Players.PlayerAdded:Connect(function(player: Player)
+    DataControler.NewPlayer(player)
+    ChekingUpgrade.Cheking(player)
+end)
 
 --local Variavel = Bridgnet2.ServerBridge("NOMEDOREMOTE")
 

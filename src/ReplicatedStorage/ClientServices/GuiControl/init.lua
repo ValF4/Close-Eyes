@@ -104,7 +104,7 @@ local HudBottons = {
 	end
 }
 
-function GuiControl:Init(Player: Player): ()
+function GuiControl:init(Player: Player): ()
 	local PlayerGui: PlayerGui = Player.PlayerGui
 	local hud: ScreenGui = PlayerGui:WaitForChild("Hud", 5) or PlayerGui.Hud
 
