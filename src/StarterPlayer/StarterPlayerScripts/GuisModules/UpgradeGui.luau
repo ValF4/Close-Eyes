@@ -58,9 +58,6 @@ function upgradeGui.InitGui(Version: string)
             end
         end
     end
-
-    print(InUpgradeGui)
-
     TweenService:Create(BackgroundUpgradeGui, DefaltAnimation, {Position = UDim2.fromScale(0.5, 0.5)}):Play()
 
     CloseBottom.MouseButton1Click:Connect(function()
@@ -68,11 +65,11 @@ function upgradeGui.InitGui(Version: string)
         InitLeaveAnimation:Play()
         InitLeaveAnimation.Completed:Connect(function()
             GetUpgradeGui.Enabled = false
-            for index: string | number, Item: TextLabel in InUpgradeGui do
+            for i = 1, #InUpgradeGui do
+                local Item: TextLabel = InUpgradeGui[1]
                 Item:Destroy()
-                table.remove(InUpgradeGui, table.find(InUpgradeGui, index))
+                table.remove(InUpgradeGui, 1)
             end
-            print(InUpgradeGui)
         end)
     end)
 
