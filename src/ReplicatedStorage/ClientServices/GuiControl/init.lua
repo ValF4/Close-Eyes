@@ -101,6 +101,10 @@ local HudBottons = {
 
 	["ShopBottom"] 		=	function(Player)
 		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
+	end,
+
+	["OcultBottom"]		= 	function()
+		--TODO: teste
 	end
 }
 
@@ -109,12 +113,34 @@ function GuiControl:init(Player: Player): ()
 	local hud: ScreenGui = PlayerGui:WaitForChild("Hud", 5) or PlayerGui.Hud
 
 	local Bottons: Frame = hud.Bottons
+	local RemoveHud: TextButton = hud.OcultBottom
+	local FrameButtons: Frame = hud.Bottons
+	local Db
+
+	local OcultHud: boolean 
 
 	local function directionGui(Name: string): ()
 		for index: string?, func in HudBottons do
 			if Name == index then func(Player) end
 		end
 	end
+
+	RemoveHud.MouseButton1Click:Connect(function() -- {0.089, 0},{0.568, 0} -- {0.089, 0},{-0.568, 0}
+		if Db then return end
+		Db = true
+		
+		if not OcultHud then
+			local ClosedhudAnimation: Tween = TweenService:Create(FrameButtons, timeInitAnimation, {Position = UDim2.fromScale(-1, 0.568)})
+			ClosedhudAnimation:Play()
+			ClosedhudAnimation.Completed:Connect(function() Db = false end)
+			OcultHud = true
+		else
+			local OpenhudAnimation: Tween = TweenService:Create(FrameButtons, timeInitAnimation, {Position = UDim2.fromScale(0.089, 0.568)})
+			OpenhudAnimation:Play()
+			OpenhudAnimation.Completed:Connect(function() Db = false end)
+			OcultHud = false
+		end
+	end)
 
 	for index, bottom: TextButton in Bottons:GetChildren() do
 		if not bottom:IsA("TextButton") then return end
