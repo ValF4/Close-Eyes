@@ -1,3 +1,4 @@
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local ReplicatedStore = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
@@ -74,6 +75,8 @@ end
 
 local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
 	if not CallGui then return end
+
+	if ReplicatedFirst:GetAttribute("UpgradeGui") then return end
 
 	OpenGui(Player, CallGui, Position)
 	GuiControl.HudControler(Player, true)

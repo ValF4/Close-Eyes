@@ -38,6 +38,7 @@ function upgradeGui.InitGui(Version: string)
     end
 
     GetUpgradeGui.Enabled = true
+    ReplicatedFirst:SetAttribute("UpgradeGui", true)
 
     for Type: string, Text: string in GetUpgradeList do
         if tostring(Type) == "Title" then
@@ -65,6 +66,7 @@ function upgradeGui.InitGui(Version: string)
         InitLeaveAnimation:Play()
         InitLeaveAnimation.Completed:Connect(function()
             GetUpgradeGui.Enabled = false
+            ReplicatedFirst:SetAttribute("UpgradeGui", nil)
             for i = 1, #InUpgradeGui do
                 local Item: TextLabel = InUpgradeGui[1]
                 Item:Destroy()
