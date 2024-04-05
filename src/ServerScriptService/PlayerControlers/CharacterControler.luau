@@ -10,11 +10,11 @@ function InitCharacterControler.TeleportService(Player: Player, cord: Vector3): 
     if not cord then
         if not Player then return end
 
-        local GetCharacter = Player.Character
+        local GetCharacter: Model = Player.Character
 
         --Character:MoveTo(Vector3.new(0, 1, 0)) -- TODO - Get cord in the teleportScritpService
     else
-        local Character = Player.Character
+        local Character: Model = Player.Character
 --
 	    Character:MoveTo(Vector3.new(cord.X, cord.Y, cord.Z))
     end

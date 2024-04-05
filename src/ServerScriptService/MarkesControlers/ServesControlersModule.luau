@@ -13,7 +13,7 @@ local allMarkes = {
     Mark_3 = {}
 }
 
-function ServerControlerModule.ListControler(Player: Player, Marker: Part, Option: string)
+function ServerControlerModule.ListControler(Player: Player, Marker: Part, Option: string): ()
     if not Player or not Marker or not Option then return end
 
     local markerTable = allMarkes[Marker.Parent.Name]

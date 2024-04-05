@@ -1,11 +1,12 @@
 local ReplicatedFirst = game:GetService("ReplicatedFirst")
-local ReplicatedStore = game:GetService("ReplicatedStorage")
+local StarterPlayer = game:GetService("StarterPlayer")
 local TweenService = game:GetService("TweenService")
 
 local timeInitAnimation: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 local InifinitTimeAnimation: TweenInfo = TweenInfo.new(60, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 1, true)
 
 local EffectControler = require(script.GuiEffects)
+local CodeModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.CodeModule)
 
 local InGui: string = nil
 
@@ -88,10 +89,12 @@ end
 local HudBottons = {
 	["InventoryBottom"]	= function(Player: Player)
 		InitGui(Player, "InventoryGui", UDim2.fromScale(0.5, 0.5))
+		-- TODO Respective function Gui 
 	end,
 
 	["ConfigBottom"] 	=	function(Player)
 		 InitGui(Player, "ConfigGui", UDim2.fromScale(0.5, 0.5))
+		 -- TODO Respective function Gui 
 	end,
 
 	["CreditBottom"] 	=	function(Player)
@@ -100,15 +103,13 @@ local HudBottons = {
 
 	["CodeBottom"] 		=	function(Player: Player)
 		InitGui(Player, "CodeGui", UDim2.fromScale(0.5, 0.5))
+		CodeModule:init(Player)
 	end,
 
 	["ShopBottom"] 		=	function(Player)
 		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
+		-- TODO Respective function Gui 
 	end,
-
-	["OcultBottom"]		= 	function()
-		--TODO: teste
-	end
 }
 
 function GuiControl:init(Player: Player): ()
@@ -118,7 +119,7 @@ function GuiControl:init(Player: Player): ()
 	local Bottons: Frame = hud.Bottons
 	local RemoveHud: TextButton = hud.OcultBottom
 	local FrameButtons: Frame = hud.Bottons
-	local Db
+	local Db: boolean
 
 	local OcultHud: boolean 
 
@@ -128,7 +129,7 @@ function GuiControl:init(Player: Player): ()
 		end
 	end
 
-	RemoveHud.MouseButton1Click:Connect(function() -- {0.089, 0},{0.568, 0} -- {0.089, 0},{-0.568, 0}
+	RemoveHud.MouseButton1Click:Connect(function(): ()
 		if Db then return end
 		Db = true
 		

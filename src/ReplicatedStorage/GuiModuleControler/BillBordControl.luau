@@ -6,7 +6,7 @@ local MaxPlayers: number = 8
 local MaxTemp: number = 120
 local MinTemp: number = 10
 
-function timer(TextEdit: TextLabel, TotalInMarker: number)
+function timer(TextEdit: TextLabel, TotalInMarker: number): ()
     if not TextEdit or not TotalInMarker then return end
 
     if TotalInMarker == MaxPlayers then

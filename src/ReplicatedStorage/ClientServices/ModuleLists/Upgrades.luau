@@ -1,4 +1,4 @@
-local UpgradeList = {
+local UpgradeList: {[string]: string} = {
     ["0.0.1"] = {
         Title = "Upgrade 0.0.1 - Game Beta",
         Topics = {

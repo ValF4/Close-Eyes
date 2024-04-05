@@ -12,7 +12,9 @@ export type ProfileType = {
 	Gems:number,
 	XP:number,
 	Inventory:{[string]:{}},
-	Config:{Version: string, VolumeMusic: number, AmbientVolume: number}
+	Config:{Version: string,
+			VolumeMusic: number,
+			AmbientVolume: number}
 }
 
 local profileTemplate:ProfileType = {

@@ -1,6 +1,7 @@
 local HudModule = {}
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 
 function HudModule:init(Player): ()

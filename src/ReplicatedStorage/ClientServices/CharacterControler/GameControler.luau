@@ -5,9 +5,9 @@ local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 
 local AnchoredPlayerEvent = Bridgnet2.ReferenceBridge("AnchoredPlayer")
 
-local GameControler = {}
+local GameControler: {} = {}
 
-local InLoaded = true
+local InLoaded: boolean = true
 
 function GameControler.CheckingAtributes(LocalPlayer: Player): ()
 	local InitThread: thread = task.spawn(function()
