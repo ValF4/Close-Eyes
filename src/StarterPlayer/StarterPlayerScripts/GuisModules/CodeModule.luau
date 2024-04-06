@@ -14,6 +14,10 @@ function codeGui:init(Player: Player): ()
     local redeemBottom: TextButton = itensFrame:FindFirstChild("redeem")
 
     for index: number, item: UICorner | TextButton | TextLabel | ImageLabel in itensFrame:GetChildren() do
+        if item ~= item:IsA("ImageLabel") then continue end
+        print(item)
+    end
+    for index: number, item: UICorner | TextButton | TextLabel | ImageLabel in itensFrame:GetChildren() do
         if item == item:IsA("ImageLabel") then
             print(item)
         end
