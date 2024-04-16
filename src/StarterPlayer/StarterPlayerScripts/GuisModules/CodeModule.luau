@@ -1,4 +1,8 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local codeGui = {}
+
+local codeModule = require(ReplicatedStorage.ClientServices.ModuleLists.Codes) 
 
 local DEFALT_MENSAGER: string = "Type here"
 local ERROR_MENSAGER: string = "Invalid or incorrect code"
@@ -10,16 +14,20 @@ local SUCESS_COLOR: Color3 = Color3.fromRGB(0,255,0)
 
 local function AlertCode(input: TextBox, alertType: string)
     if not input or not alertType then return end
+
     if alertType == "SUCESS" then
-        input.PlaceholderText = SUCESS_MENSAGER input.PlaceholderColor3 = SUCESS_COLOR
+        input.Text = SUCESS_MENSAGER
+        input.TextColor3 = SUCESS_COLOR
         task.wait(2)
-        input.PlaceholderText = DEFALT_MENSAGER input.PlaceholderColor3 = DEFALT_COLOR
-    else
-        input.PlaceholderText = ERROR_MENSAGER input.PlaceholderColor3 = ERROR_COLOR
+        input.Text = DEFALT_MENSAGER
+        input.TextColor3 = DEFALT_COLOR
+    elseif alertType == "ERROR" then
+        input.Text = ERROR_MENSAGER
+        input.TextColor3 = ERROR_COLOR
         task.wait(2)
-        input.PlaceholderText = DEFALT_MENSAGER input.PlaceholderColor3 = DEFALT_COLOR
+        input.Text = DEFALT_MENSAGER
+        input.TextColor3 = DEFALT_COLOR
     end
-    return
 end
 
 function codeGui:init(Player: Player): ()
@@ -35,11 +43,21 @@ function codeGui:init(Player: Player): ()
     local input: TextBox = itensFrame:FindFirstChild("input")
     local redeemBottom: TextButton = itensFrame:FindFirstChild("redeem")
 
+    input.Focused:Connect(function()
+        input.ClearTextOnFocus = true
+    end)
+
     redeemBottom.MouseButton1Click:Connect(function()
         local getTextInInput: string | number = input.Text
         if not getTextInInput or getTextInInput == "" then AlertCode(input, "ERROR") return end
-        print(getTextInInput)
+        
+        local getCode = codeModule[getTextInInput]
 
+        if getCode then
+            AlertCode(input, "SUCESS")
+        elseif not getCode then
+            AlertCode(input, "ERROR")
+        end
     end)
 end
 
