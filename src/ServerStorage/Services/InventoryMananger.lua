@@ -32,6 +32,11 @@ function DataMethods:setVersion(Value:string)
 	self.Config.Version = Value
 end
 
+function DataMethods:setCodeActvated(Value:string)
+	if not Value then return end
+	self.Config.Codes[Value] = true
+end
+
 
 --------------------------------//--------------------------------------
 module = {}

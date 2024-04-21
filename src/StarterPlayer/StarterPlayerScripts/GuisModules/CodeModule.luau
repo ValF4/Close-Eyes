@@ -55,13 +55,11 @@ function codeGui:init(Player: Player): ()
         
         local ckekingCode = CodeSystemEvent:InvokeServerAsync(getTextInInput)
 
-        print(ckekingCode)
-
-        --if ckekingCode then
-        --    AlertCode(input, "SUCESS")
-        --elseif not ckekingCode then
-        --    AlertCode(input, "ERROR")
-        --end
+        if ckekingCode then
+            AlertCode(input, "SUCESS")
+        elseif not ckekingCode then
+            AlertCode(input, "ERROR")
+        end
     end)
 end
 

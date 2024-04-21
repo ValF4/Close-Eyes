@@ -25,9 +25,9 @@ BillBordControl:ViewPortControler()
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3) CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterControler.AnchoredCharacterControler(Player, State) end)
 
-CodeSystemEvent.OnServerInvoke = function(Player: Player?, codeInInput: string?)
-    if not codeInInput then return end
-    return CodeRecompenseSystem.checkingList(codeInInput)
+CodeSystemEvent.OnServerInvoke = function(Player: Player?, codeInInput: string?): boolean
+    if not codeInInput then return end 
+    return CodeRecompenseSystem.checkingList(Player, codeInInput)
 end
 
 Players.PlayerAdded:Connect(function(player: Player)

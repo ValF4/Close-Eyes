@@ -1,13 +1,13 @@
 local codes = {
-    ["Nasuke"] = function()
+    ["Nasuke"] = function(Player: Player): ()
         print("Codigo Nasuke ativado")
     end,
 
-    ["TokyoStudio"] = function()
+    ["TokyoStudio"] = function(Player: Player): ()
         print("Codigo TokyoStudio ativado")
     end,
 
-    ["InaskStudio"] = function()
+    ["InaskStudio"] = function(Player: Player): ()
         print("Codigo InaskStudio ativado")
     end,
 }

@@ -13,7 +13,7 @@ export type ProfileType = {
 	XP:number,
 	Inventory:{[string]:{}},
 	Config:{
-		Code: {string},
+		Codes: {boolean},
 		Version: string,
 		VolumeMusic: number,
 		AmbientVolume: number}
