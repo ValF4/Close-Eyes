@@ -10,9 +10,11 @@ local CharacterControler = require(ServerScriptService.PlayerControlers.Characte
 local InitMarksServices = require(ServerScriptService.MarkesControlers.InitMarksModule)
 local DataManager = require(ServerStorage.Services.DataMananger)
 local DataControler = require(ServerScriptService.PlayerControlers.DataControler)
+local CodeRecompenseSystem = require(ServerScriptService.PlayerControlers.codeSystem)
 
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
+local CodeSystemEvent = Bridgnet2.ServerBridge("CodeSystem")
 --local SaveData = Bridgnet2.ServerBridge("SaveData")
 
 DataManager.Init()
@@ -22,6 +24,11 @@ BillBordControl:ViewPortControler()
 
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3) CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterControler.AnchoredCharacterControler(Player, State) end)
+
+CodeSystemEvent.OnServerInvoke = function(Player: Player?, codeInInput: string?)
+    if not codeInInput then return end
+    return CodeRecompenseSystem.checkingList(codeInInput)
+end
 
 Players.PlayerAdded:Connect(function(player: Player)
     DataControler.NewPlayer(player)

@@ -2,7 +2,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local codeGui = {}
 
-local codeModule = require(ReplicatedStorage.ClientServices.ModuleLists.Codes) 
+local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
+
+local CodeSystemEvent = Bridgnet2.ReferenceBridge("CodeSystem")
 
 local DEFALT_MENSAGER: string = "Type here"
 local ERROR_MENSAGER: string = "Invalid or incorrect code"
@@ -51,13 +53,15 @@ function codeGui:init(Player: Player): ()
         local getTextInInput: string | number = input.Text
         if not getTextInInput or getTextInInput == "" then AlertCode(input, "ERROR") return end
         
-        local getCode = codeModule[getTextInInput]
+        local ckekingCode = CodeSystemEvent:InvokeServerAsync(getTextInInput)
 
-        if getCode then
-            AlertCode(input, "SUCESS")
-        elseif not getCode then
-            AlertCode(input, "ERROR")
-        end
+        print(ckekingCode)
+
+        --if ckekingCode then
+        --    AlertCode(input, "SUCESS")
+        --elseif not ckekingCode then
+        --    AlertCode(input, "ERROR")
+        --end
     end)
 end
 

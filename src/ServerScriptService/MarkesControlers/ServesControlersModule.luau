@@ -10,7 +10,6 @@ local MaxPlayers: number = 8
 local allMarkes = {
     Mark_1 = {},
     Mark_2 = {},
-    Mark_3 = {}
 }
 
 function ServerControlerModule.ListControler(Player: Player, Marker: Part, Option: string): ()
