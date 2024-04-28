@@ -8,6 +8,8 @@ local exchangeVersion = Bridgnet2.ReferenceBridge("exchangeVersion")
 
 local ChekingUpgrade = {}
 
+function ChekingUpgrade.GetVersion() return ServerStorage.serverInfo:GetAttribute("Version") end
+
 function ChekingUpgrade.Cheking(Player: Player): ()
 
     if not Player then return end

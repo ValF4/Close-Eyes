@@ -15,6 +15,7 @@ local CodeRecompenseSystem = require(ServerScriptService.PlayerControlers.codeSy
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
 local CodeSystemEvent = Bridgnet2.ServerBridge("CodeSystem")
+local GetVersion = Bridgnet2.ServerBridge("GetVersion")
 --local SaveData = Bridgnet2.ServerBridge("SaveData")
 
 DataManager.Init()
@@ -28,6 +29,11 @@ AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterCo
 CodeSystemEvent.OnServerInvoke = function(Player: Player?, codeInInput: string?): boolean
     if not codeInInput then return end 
     return CodeRecompenseSystem.checkingList(Player, codeInInput)
+end
+
+GetVersion.OnServerInvoke = function(Player: Player): string
+    if not Player then return end  
+    return ChekingUpgrade.GetVersion(Player)
 end
 
 Players.PlayerAdded:Connect(function(player: Player)
