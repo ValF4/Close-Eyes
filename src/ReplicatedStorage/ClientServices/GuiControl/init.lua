@@ -5,6 +5,8 @@ local TweenService = game:GetService("TweenService")
 local timeInitAnimation: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 local InifinitTimeAnimation: TweenInfo = TweenInfo.new(60, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 1, true)
 
+local BottomMouseAnimation: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+
 local EffectControler = require(script.GuiEffects)
 local CodeModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.CodeModule)
 
@@ -118,9 +120,9 @@ function GuiControl:init(Player: Player): ()
 
 	local Bottons: Frame = hud.Bottons
 	local FrameButtons: Frame = hud.Bottons
-	local Db: boolean
 
-	local OcultHud: boolean 
+	local Db: boolean
+	local OcultHud: boolean
 
 	local function directionGui(Name: string): ()
 		for index: string?, func in HudBottons do
@@ -130,6 +132,17 @@ function GuiControl:init(Player: Player): ()
 
 	for index, bottom: TextButton in Bottons:GetChildren() do
 		if not bottom:IsA("TextButton") then return end
+
+		bottom.MouseEnter:Connect(function(x, y)
+			local EnterAnimation: Tween = TweenService:Create(bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.28, 0.5)})
+			EnterAnimation:Play() -- 0.28, 0.5
+		end)
+
+		bottom.MouseLeave:Connect(function(x, y)
+			local LeaveAnimation: Tween = TweenService:Create(bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.27, 0.4)})
+			LeaveAnimation:Play() -- 0.27, 0.4
+		end)
+
 		bottom.MouseButton1Up:Connect(function()
 			directionGui(bottom.Name)
 		end)

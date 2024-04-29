@@ -12,7 +12,6 @@ local InLoaded: boolean = true
 function GameControler.CheckingAtributes(LocalPlayer: Player): ()
 	local InitThread: thread = task.spawn(function()
         while task.wait() do
-
             local GetLoadingAtribute: boolean? = ReplicatedFirst:GetAttribute("IN_LOADING")
 
             if not GetLoadingAtribute then
