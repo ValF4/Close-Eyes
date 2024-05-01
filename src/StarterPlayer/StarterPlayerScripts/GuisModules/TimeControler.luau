@@ -23,7 +23,7 @@ function timeControler:init(): ()
 
     local Version: string = GetVersion()
 
-    RunService.Heartbeat:Connect(function(deltaTime):()
+    RunService.Heartbeat:Connect(function(_):()
         TextVersion.Text = `Game Version: {Version} | Life Server: {os.date("!%X", workspace.DistributedGameTime)}`
         task.wait(1)
     end)

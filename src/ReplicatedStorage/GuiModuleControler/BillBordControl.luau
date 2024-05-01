@@ -3,7 +3,7 @@ local BillBordControl = {}
 local BreakConter: boolean
 
 local MaxPlayers: number = 8
-local MaxTemp: number = 120
+local MaxTemp: number = 60
 local MinTemp: number = 10
 
 function timer(TextEdit: TextLabel, TotalInMarker: number): ()
@@ -23,7 +23,7 @@ function timer(TextEdit: TextLabel, TotalInMarker: number): ()
         for TimeLeft: number = MaxTemp, 0, -1 do
             if TotalInMarker == 0 then
                 BreakConter = true
-                TextEdit.Text = "Iniciando em: Aguardando jogadores"
+                TextEdit.Text = "Aguardando jogadores..."
                 break
             end
             if BreakConter then BreakConter = false return end
@@ -37,12 +37,11 @@ function timer(TextEdit: TextLabel, TotalInMarker: number): ()
     end
 end
 
-
 function BillBordControl.ViewPortControler(MarkParent: Model ,Value: number): ()
     if not MarkParent or not Value then
         local GetAllMarkes = workspace.InitGameMarks:GetChildren() or workspace:WaitForChild("InitGameMarks"):GetChildren()
 
-        for index: number, Maker: Model in GetAllMarkes do
+        for _, Maker: Model in GetAllMarkes do
             local GetBillBord = Maker.ViewPort.BillboardGui
 
             local GetTimerText: TextLabel = GetBillBord.Frame.Timer

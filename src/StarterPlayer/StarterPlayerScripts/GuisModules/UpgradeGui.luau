@@ -1,15 +1,14 @@
-local Players = game:GetService("Players")
-local ReplicatedFirst = game:GetService("ReplicatedFirst")
+local Players           = game:GetService("Players")
+local ReplicatedFirst   = game:GetService("ReplicatedFirst")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TweenService = game:GetService("TweenService")
-
-local InLoaded: boolean = true
-
-local DefaltAnimation: TweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Linear)
+local TweenService      = game:GetService("TweenService")
 
 local Player: Player = Players.LocalPlayer
 
 local UpgradeList = require(ReplicatedStorage.ClientServices.ModuleLists.Upgrades)
+
+local DefaltAnimation: TweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Linear)
+
 local upgradeGui = {}
 local InUpgradeGui: {TextLabel} = {}
 

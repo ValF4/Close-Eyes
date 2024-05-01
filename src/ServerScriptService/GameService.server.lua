@@ -16,15 +16,14 @@ local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
 local CodeSystemEvent = Bridgnet2.ServerBridge("CodeSystem")
 local GetVersion = Bridgnet2.ServerBridge("GetVersion")
---local SaveData = Bridgnet2.ServerBridge("SaveData")
 
 DataManager.Init()
 InitMarksServices.InitMarks()
 CharacterControler.InitControlers()
 BillBordControl:ViewPortControler()
 
-TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3) CharacterControler.TeleportService(Player, Coords) end)
-AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean) CharacterControler.AnchoredCharacterControler(Player, State) end)
+TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3): () CharacterControler.TeleportService(Player, Coords) end)
+AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean): () CharacterControler.AnchoredCharacterControler(Player, State) end)
 
 CodeSystemEvent.OnServerInvoke = function(Player: Player?, codeInInput: string?): boolean
     if not codeInInput then return end 
@@ -36,7 +35,7 @@ GetVersion.OnServerInvoke = function(Player: Player): string
     return ChekingUpgrade.GetVersion(Player)
 end
 
-Players.PlayerAdded:Connect(function(player: Player)
+Players.PlayerAdded:Connect(function(player: Player): ()
     DataControler.NewPlayer(player)
     ChekingUpgrade.Cheking(player)
 end)

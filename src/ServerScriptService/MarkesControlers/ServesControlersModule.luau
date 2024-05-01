@@ -17,11 +17,10 @@ function ServerControlerModule.ListControler(Player: Player, Marker: Part, Optio
 
     local markerTable = allMarkes[Marker.Parent.Name]
     
-    if not markerTable or #markerTable == MaxPlayers then return warn("Funcione") end
+    if not markerTable or #markerTable == MaxPlayers then return end
 
     if Option == "ADD" then
         if table.find(markerTable, Player) then return end
-
         table.insert(markerTable, Player)
         BillBordControl.ViewPortControler(Marker.Parent, #markerTable)
     elseif Option == "REMOVE" then
@@ -32,7 +31,6 @@ function ServerControlerModule.ListControler(Player: Player, Marker: Part, Optio
     else
         return warn("ERROR - Option Value is invalid")
     end
-
 end
 
 return ServerControlerModule

@@ -34,12 +34,15 @@ function InitGameMarkes.InitMarks(): ()
 			local getChildrens: {} = Mark:GetChildren()
 			for	index: number, PartMark: Part in getChildrens do
 				if PartMark.Name == "Marker" then
+					
 					PartMark.Touched:Connect(function(otherPart: BasePart)
 						ConectionMarks(otherPart, PartMark)
 					end)
+
 					PartMark.TouchEnded:Connect(function(otherPart: BasePart)
 						LeaveMark(otherPart, PartMark)
 					end)
+
 				end
 			end
 		end

@@ -8,7 +8,7 @@ local exchangeVersion = Bridgnet2.ReferenceBridge("exchangeVersion")
 
 local ChekingUpgrade = {}
 
-function ChekingUpgrade.GetVersion() return ServerStorage.serverInfo:GetAttribute("Version") end
+function ChekingUpgrade.GetVersion(): string? return ServerStorage.serverInfo:GetAttribute("Version") end
 
 function ChekingUpgrade.Cheking(Player: Player): ()
 
@@ -20,7 +20,7 @@ function ChekingUpgrade.Cheking(Player: Player): ()
 
     local GetPlayerVersion: string = GetPlayerData.Config.Version
 
-   -- if GetPlayerVersion == GetVersion then return end
+   -- if GetPlayerVersion == GetVersion then return end -- TODO Ativar assim que o jogo estiver pronto
  
     GetPlayerData:setVersion(GetVersion)
 

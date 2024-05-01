@@ -110,7 +110,7 @@ local HudBottons = {
 
 	["ShopBottom"] 		=	function(Player)
 		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
-		-- TODO Respective function Gui 
+		-- TODO Respective function Gui
 	end,
 }
 
@@ -118,19 +118,19 @@ function GuiControl:init(Player: Player): ()
 	local PlayerGui: PlayerGui = Player.PlayerGui
 	local hud: ScreenGui = PlayerGui:WaitForChild("Hud", 5) or PlayerGui.Hud
 
-	local Bottons: Frame = hud.Bottons
 	local FrameButtons: Frame = hud.Bottons
 
 	local Db: boolean
 	local OcultHud: boolean
 
 	local function directionGui(Name: string): ()
-		for index: string?, func in HudBottons do
-			if Name == index then func(Player) end
-		end
+		if not Name then return end
+		local GetFunction = HudBottons[Name]
+		if not GetFunction then warn("Function in HudButtons not find.") end
+		GetFunction(Player)
 	end
 
-	for index, bottom: TextButton in Bottons:GetChildren() do
+	for _, bottom: TextButton in FrameButtons:GetChildren() do
 		if not bottom:IsA("TextButton") then return end
 
 		bottom.MouseEnter:Connect(function(x, y)
