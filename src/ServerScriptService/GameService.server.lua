@@ -11,6 +11,7 @@ local InitMarksServices = require(ServerScriptService.MarkesControlers.InitMarks
 local DataManager = require(ServerStorage.Services.DataMananger)
 local DataControler = require(ServerScriptService.PlayerControlers.DataControler)
 local CodeRecompenseSystem = require(ServerScriptService.PlayerControlers.codeSystem)
+local GameFunctions = require(ServerScriptService.GameFunctions.benchService)
 
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
@@ -21,6 +22,7 @@ DataManager.Init()
 InitMarksServices.InitMarks()
 CharacterControler.InitControlers()
 BillBordControl:ViewPortControler()
+GameFunctions.benchinit()
 
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3): () CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean): () CharacterControler.AnchoredCharacterControler(Player, State) end)
