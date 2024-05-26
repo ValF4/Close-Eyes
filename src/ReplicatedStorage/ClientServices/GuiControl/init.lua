@@ -90,39 +90,45 @@ local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
 
 	if ReplicatedFirst:GetAttribute("UpgradeGui") then return end
 
+	EffectControler.Controler(Player, true)
 	--OpenGui(Player, CallGui, Position)
 	--GuiControl.HudControler(Player, true)
-	EffectControler.Controler(Player, true)
-	RemoveGui(Player, CallGui)
-	InGui = CallGui
+	--RemoveGui(Player, CallGui)
+	--InGui = CallGui
 end
 
 local HudBottons = {
 	["InventoryBottom"]	= function(Player: Player)
+		print("InventoryBottom")
 		--InitGui(Player, "InventoryGui", UDim2.fromScale(0.5, 0.5))
 		-- TODO Respective function Gui 
 	end,
 
 	["ConfigBottom"] =function(Player)
+		print("ConfigBottom")
 		 --InitGui(Player, "ConfigGui", UDim2.fromScale(0.5, 0.5))
 		 -- TODO Respective function Gui 
 	end,
 
 	["CalendarBottom"] = function(Player)
+		print("CalendarBottom")
 		 --InitGui(Player, "CreditGui", UDim2.fromScale(0.5, 0.5))
 	end,
 
 	["MissionBottom"] =	function(Player: Player)
+		print("MissionBottom")
 		--InitGui(Player, "CodeGui", UDim2.fromScale(0.5, 0.5))
 		--CodeModule:init(Player)
 	end,
 
 	["ShopBottom"] 	= function(Player)
+		print("ShopBottom")
 		--InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
 		-- TODO Respective function Gui
 	end,
 
 	["BuyGoldemBottom"] = function(Player)
+		print("BuyGoldemBottom")
 		--InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
 		-- TODO Respective function Gui
 	end,
@@ -167,7 +173,6 @@ function GuiControl:init(Player: Player): ()
 				end)
 
 				Bottom.MouseButton1Up:Connect(function()
-					print(Bottom.Name)
 					directionGui(Bottom.Name)
 				end)
 

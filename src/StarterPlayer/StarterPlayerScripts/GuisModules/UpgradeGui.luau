@@ -17,13 +17,13 @@ function upgradeGui.InitGui(Version: string): ()
 
     local GetPlayerGui: PlayerGui = Player.PlayerGui
 
-    local GetUpgradeGui: ScreenGui = GetPlayerGui:FindFirstChild("UpgradeGui")
+    local GetUpgradeGui: ScreenGui = GetPlayerGui:WaitForChild("UpgradeGui")
     local BackgroundUpgradeGui: Frame = GetUpgradeGui:FindFirstChild("background")
     local CloseBottom: ImageButton = BackgroundUpgradeGui:FindFirstChild("Exit")
 
-    local TemplateTexts: Folder = BackgroundUpgradeGui:FindFirstChild("Contents")
-    local ContentLabel: TextLabel = TemplateTexts:FindFirstChild("Content")
-    local TitleLabel: TextLabel = TemplateTexts:FindFirstChild("Title")
+    local TemplateFiles: Folder = BackgroundUpgradeGui:FindFirstChild("Contents")
+    local WallpaperTemplate: ImageLabel = TemplateFiles:FindFirstChild("Wallpaper")
+    local InfosTemplates: TextLabel = TemplateFiles:FindFirstChild("info_Template")
 
     local UpgradeScrolling: ScrollingFrame = BackgroundUpgradeGui:FindFirstChild("ScrollingFrame")
 
@@ -32,24 +32,25 @@ function upgradeGui.InitGui(Version: string): ()
     local GetUpgradeList: {} = UpgradeList[Version]
     if not GetUpgradeList then return end
 
-    repeat
-        task.wait()
-    until not ReplicatedFirst:GetAttribute("IN_WELCOME")
+    repeat task.wait() until not ReplicatedFirst:GetAttribute("IN_WELCOME")
 
     GetUpgradeGui.Enabled = true
     ReplicatedFirst:SetAttribute("UpgradeGui", true)
 
-    for Type: string, Text: string in GetUpgradeList do
-        if tostring(Type) == "Title" then
-            local UpgradeTitle: TextLabel = TitleLabel:Clone()
-            UpgradeTitle.Name = Text
-            UpgradeTitle.Text = Text
-            UpgradeTitle.Parent = UpgradeScrolling
-            UpgradeTitle.Visible = true
-            table.insert(InUpgradeGui, UpgradeTitle)
+    for Type: string, Iten: string in GetUpgradeList do
+         if tostring(Type) == "Configs" then
+            local UpgradeTemplate: TextLabel = WallpaperTemplate:Clone()
+            UpgradeTemplate.Image = Iten.Image_Id
+            UpgradeTemplate.U_Version.Text = Iten.Title_Version
+            UpgradeTemplate.N_Version.Text = Iten.Name_Version
+            UpgradeTemplate.Name = Type
+            UpgradeTemplate.LayoutOrder = -1
+            UpgradeTemplate.Parent = UpgradeScrolling
+            UpgradeTemplate.Visible = true
+            table.insert(InUpgradeGui, UpgradeTemplate)
         elseif tostring(Type) == "Topics" then
-            for Index: number, Topic: string in Text do
-                local UpgradeTopic: TextLabel = ContentLabel:Clone()
+            for Index: number, Topic: string in Iten do
+                local UpgradeTopic: TextLabel = InfosTemplates:Clone()
                 UpgradeTopic.Name = Index
                 UpgradeTopic.Text = Topic
                 UpgradeTopic.Parent = UpgradeScrolling
@@ -59,6 +60,14 @@ function upgradeGui.InitGui(Version: string): ()
         end
     end
     TweenService:Create(BackgroundUpgradeGui, DefaltAnimation, {Position = UDim2.fromScale(0.5, 0.5)}):Play()
+
+    CloseBottom.MouseEnter:Connect(function(x, y)
+        TweenService:Create(CloseBottom, DefaltAnimation, {Size = UDim2.fromScale(0.07, 0.06)}):Play()
+    end)
+
+    CloseBottom.MouseLeave:Connect(function(x, y)
+        TweenService:Create(CloseBottom, DefaltAnimation, {Size = UDim2.fromScale(0.06, 0.05)}):Play()
+    end)
 
     CloseBottom.MouseButton1Click:Connect(function()
         local InitLeaveAnimation = TweenService:Create(BackgroundUpgradeGui, DefaltAnimation, {Position = UDim2.fromScale(0.5, 2)})

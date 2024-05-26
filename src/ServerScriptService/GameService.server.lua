@@ -49,7 +49,7 @@ end
 Players.PlayerAdded:Connect(function(player: Player): ()
 	if not player then return end
     DataControler.NewPlayer(player)
-    ChekingUpgrade.Cheking(player)
+    ChekingUpgrade.Checking(player)
 end)
 
 --local Variavel = Bridgnet2.ServerBridge("NOMEDOREMOTE")

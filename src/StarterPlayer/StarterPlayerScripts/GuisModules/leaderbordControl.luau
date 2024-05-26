@@ -9,12 +9,12 @@ local displayScroling: UDim2 = UDim2.fromScale(0.872, 0.224)
 local recallScroling: UDim2 = UDim2.fromScale(2 ,0.224)
 
 local Bridgnet2         = require(ReplicatedStorage.Packages.BridgeNet2)
-local getInformations   = Bridgnet2.ReferenceBridge("getInformations")
+local getInformations   = Bridgnet2.ClientBridge("getInformations")
 
 local leaderBordControl = {}
 
 local scrollTablePlayer: ScrollingFrame
-local FrameTemplate: Frame = script.FrameTemplate
+local FrameTemplate: Frame
 
 function leaderBordControl.upgradeList()
     
@@ -47,8 +47,10 @@ function leaderBordControl.init()
     repeat task.wait() until not ReplicatedFirst:GetAttribute("LOADING_RESOURCES")
 
     local LeaderbordGui: ScreenGui = playerGui:WaitForChild("Leaderboard")
+    local TemplateFolder: Folder = LeaderbordGui:FindFirstChild("TemplatePlayer")
 
     scrollTablePlayer = LeaderbordGui:FindFirstChild("PlayerScroller")
+    FrameTemplate = TemplateFolder:FindFirstChild("FrameTemplate")
 
     UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
         if input.KeyCode == Enum.KeyCode.Tab then

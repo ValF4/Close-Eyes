@@ -6,16 +6,17 @@ local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 
 local exchangeVersion = Bridgnet2.ReferenceBridge("exchangeVersion")
 
-local ChekingUpgrade = {}
+local CheckingUpgrade = {}
 
-function ChekingUpgrade.GetVersion(): string? return ServerStorage.serverInfo:GetAttribute("Version") end
+function CheckingUpgrade.GetVersion(): string? return ServerStorage.serverInfo:GetAttribute("Version") end
 
-function ChekingUpgrade.Cheking(Player: Player): ()
+function CheckingUpgrade.Checking(Player: Player): ()
 
     if not Player then return end
 
     local GetVersion: string = ServerStorage.serverInfo:GetAttribute("Version")
     local GetPlayerData = InventoryMananger:GetInventory(Player)
+
     if not GetPlayerData then return end
 
     local GetPlayerVersion: string = GetPlayerData.Config.Version
@@ -27,4 +28,4 @@ function ChekingUpgrade.Cheking(Player: Player): ()
     exchangeVersion:Fire(Player, GetVersion)
 end
 
-return ChekingUpgrade
+return CheckingUpgrade
