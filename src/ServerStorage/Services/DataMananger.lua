@@ -7,29 +7,32 @@ local ProfileService = require(ServerStorage.ServerPackages.ProfileService)
 local module = {}
 
 export type ProfileType = {
-	Coins:number,
-	Level:number,
-	Gems:number,
-	XP:number,
+	BrowmBottom:number,
+	GoldemBottom:number,
 	Inventory:{[string]:{}},
 	Config:{
+		last_time_logged: string,
 		Codes: {boolean},
 		Version: string,
 		VolumeMusic: number,
-		AmbientVolume: number}
+		AmbientVolume: number,
+		Shadow_disabled: boolean,
+		Game_quality: string,
+	}
 }
 
 local profileTemplate:ProfileType = {
-	Coins = 0,
-	Level = 0,
-	Gems = 0,
-	XP = 0,
+	BrowmBottom = 0,
+	GoldemBottom = 0,
 	Inventory = {},
 	Config = {
+		last_time_logged = "",
 		Codes = {},
 		Version = "",
 		VolumeMusic = 100,
 		AmbientVolume = 100,
+		Shadow_disabled = false,
+		Game_quality = "normal"
 	},
 }	
 

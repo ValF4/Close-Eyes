@@ -10,8 +10,8 @@ function DataControler.NewPlayer(Player: Player): ()
     local SetConfiguration = Instance.new("Configuration")
     SetConfiguration.Name = "PlayerData"
 
-    SetConfiguration:SetAttribute("Coins", 0)
-    SetConfiguration:SetAttribute("Gems", 0)
+    SetConfiguration:SetAttribute("BrowmBottom", 0)
+    SetConfiguration:SetAttribute("GoldemBottom", 0)
     SetConfiguration:SetAttribute("LastVersion", "")
 
     SetConfiguration.Parent = Player
@@ -19,8 +19,8 @@ function DataControler.NewPlayer(Player: Player): ()
     local getData = InventoryMananger:GetInventory(Player)
     if not getData then return warn("ERROR - erro in get player data.") end
 
-    SetConfiguration:SetAttribute("Coins", getData.Coins)
-    SetConfiguration:SetAttribute("Gems", getData.Gems)
+    SetConfiguration:SetAttribute("BrowmBottom", getData.BrowmBottom)
+    SetConfiguration:SetAttribute("GoldemBottom", getData.GoldemBottom)
     SetConfiguration:SetAttribute("LastVersion", getData.Config.Version)
 end
 

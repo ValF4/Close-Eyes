@@ -10,27 +10,28 @@ function HudModule:init(Player): ()
     local PlayerGui: PlayerGui = Player.PlayerGui
     
     local Hud: ScreenGui = PlayerGui:FindFirstChild("Hud")
-    local InfoFrame: Frame = Hud:FindFirstChild("InfoFrame")
+    local Coins_Frame: Frame = Hud:FindFirstChild("Coins_Frame")
 
-    if not Hud or not InfoFrame then return end
+    if not Hud or not Coins_Frame then return end
     
-    local GemsText: TextLabel = InfoFrame:FindFirstChild("Gems")
-    local MoneyText: TextLabel = InfoFrame:FindFirstChild("Money")
+    local getGoldemBackground: ImageLabel = Coins_Frame:FindFirstChild("Goldem_bottom_Background")
+    local getBrowmBackground: ImageLabel = Coins_Frame:FindFirstChild("Brown_bottom_Background")
 
-    if not GemsText or not MoneyText then return end
+    local getGoldemText: TextLabel = getGoldemBackground:FindFirstChild("Goldem_Text")
+    local getBrowmText: TextLabel = getBrowmBackground:FindFirstChild("Brown_Text")
+
+    if not getGoldemText or not getBrowmText then return end
 
     local GetPlayersInfos: Configuration = Player.PlayerData
-    if not GetPlayersInfos then return end
 
-    MoneyText.Text = "Coins: " ..GetPlayersInfos:GetAttribute("Coins")
-    GemsText.Text = "Gems: " ..GetPlayersInfos:GetAttribute("Gems")
+    getGoldemText.Text = GetPlayersInfos:GetAttribute("GoldemBottom")
+    getBrowmText.Text = GetPlayersInfos:GetAttribute("BrowmBottom")
 
     GetPlayersInfos.AttributeChanged:Connect(function(attribute: string)
         if tostring(attribute) == "LastVersion" then return end
 
-        MoneyText.Text = "Coins: " ..GetPlayersInfos:GetAttribute("Coins")
-        GemsText.Text = "Gems: " ..GetPlayersInfos:GetAttribute("Gems")
-        
+        getGoldemText.Text = GetPlayersInfos:GetAttribute("GoldemBottom")
+        getBrowmText.Text = GetPlayersInfos:GetAttribute("BrowmBottom")
     end)
 end
 

@@ -12,11 +12,14 @@ local DataManager = require(ServerStorage.Services.DataMananger)
 local DataControler = require(ServerScriptService.PlayerControlers.DataControler)
 local CodeRecompenseSystem = require(ServerScriptService.PlayerControlers.codeSystem)
 local GameFunctions = require(ServerScriptService.GameFunctions.benchService)
+local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
 local CodeSystemEvent = Bridgnet2.ServerBridge("CodeSystem")
 local GetVersion = Bridgnet2.ServerBridge("GetVersion")
+
+local getInformations = Bridgnet2.ReferenceBridge("getInformations")
 
 DataManager.Init()
 InitMarksServices.InitMarks()
@@ -37,7 +40,14 @@ GetVersion.OnServerInvoke = function(Player: Player): string
     return ChekingUpgrade.GetVersion(Player)
 end
 
+getInformations.OnServerInvoke = function(player)
+    if not player then return end
+    local getinformation = InventoryMananger:GetInventory(player)
+    return getinformation
+end
+
 Players.PlayerAdded:Connect(function(player: Player): ()
+	if not player then return end
     DataControler.NewPlayer(player)
     ChekingUpgrade.Cheking(player)
 end)

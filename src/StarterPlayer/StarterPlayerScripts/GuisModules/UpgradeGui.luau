@@ -32,9 +32,9 @@ function upgradeGui.InitGui(Version: string): ()
     local GetUpgradeList: {} = UpgradeList[Version]
     if not GetUpgradeList then return end
 
-    while true do task.wait()
-        if not ReplicatedFirst:GetAttribute("IN_LOADING") then break end
-    end
+    repeat
+        task.wait()
+    until not ReplicatedFirst:GetAttribute("IN_WELCOME")
 
     GetUpgradeGui.Enabled = true
     ReplicatedFirst:SetAttribute("UpgradeGui", true)

@@ -6,6 +6,7 @@ local timeInitAnimation: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, 
 local InifinitTimeAnimation: TweenInfo = TweenInfo.new(60, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 1, true)
 
 local BottomMouseAnimation: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+local TextHudTransparency: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 
 local EffectControler = require(script.GuiEffects)
 local CodeModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.CodeModule)
@@ -13,6 +14,14 @@ local CodeModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.CodeMo
 local InGui: string = nil
 
 local GuiControl: {} = {}
+
+local TextBottons = {
+	CalendarBottom 		= "Daily Rewards",
+	MissionBottom 		= "Missions",
+	InventoryBottom 	= "Inventory",
+	ShopBottom 			= "Shop",
+	ConfigBottom		= "Config"
+}
 
 local function OpenGui(Player: Player, Gui: string, CodePosition: UDim2): ()
 	if not Player or not Gui then return end
@@ -81,8 +90,8 @@ local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
 
 	if ReplicatedFirst:GetAttribute("UpgradeGui") then return end
 
-	OpenGui(Player, CallGui, Position)
-	GuiControl.HudControler(Player, true)
+	--OpenGui(Player, CallGui, Position)
+	--GuiControl.HudControler(Player, true)
 	EffectControler.Controler(Player, true)
 	RemoveGui(Player, CallGui)
 	InGui = CallGui
@@ -90,26 +99,31 @@ end
 
 local HudBottons = {
 	["InventoryBottom"]	= function(Player: Player)
-		InitGui(Player, "InventoryGui", UDim2.fromScale(0.5, 0.5))
+		--InitGui(Player, "InventoryGui", UDim2.fromScale(0.5, 0.5))
 		-- TODO Respective function Gui 
 	end,
 
-	["ConfigBottom"] 	=	function(Player)
-		 InitGui(Player, "ConfigGui", UDim2.fromScale(0.5, 0.5))
+	["ConfigBottom"] =function(Player)
+		 --InitGui(Player, "ConfigGui", UDim2.fromScale(0.5, 0.5))
 		 -- TODO Respective function Gui 
 	end,
 
-	["CreditBottom"] 	=	function(Player)
-		 InitGui(Player, "CreditGui", UDim2.fromScale(0.5, 0.5))
+	["CalendarBottom"] = function(Player)
+		 --InitGui(Player, "CreditGui", UDim2.fromScale(0.5, 0.5))
 	end,
 
-	["CodeBottom"] 		=	function(Player: Player)
-		InitGui(Player, "CodeGui", UDim2.fromScale(0.5, 0.5))
-		CodeModule:init(Player)
+	["MissionBottom"] =	function(Player: Player)
+		--InitGui(Player, "CodeGui", UDim2.fromScale(0.5, 0.5))
+		--CodeModule:init(Player)
 	end,
 
-	["ShopBottom"] 		=	function(Player)
-		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
+	["ShopBottom"] 	= function(Player)
+		--InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
+		-- TODO Respective function Gui
+	end,
+
+	["BuyGoldemBottom"] = function(Player)
+		--InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
 		-- TODO Respective function Gui
 	end,
 }
@@ -118,7 +132,7 @@ function GuiControl:init(Player: Player): ()
 	local PlayerGui: PlayerGui = Player.PlayerGui
 	local hud: ScreenGui = PlayerGui:WaitForChild("Hud", 5) or PlayerGui.Hud
 
-	local FrameButtons: Frame = hud.Bottons
+	local FrameButtons: Frame = hud:GetChildren()
 
 	local Db: boolean
 	local OcultHud: boolean
@@ -130,22 +144,35 @@ function GuiControl:init(Player: Player): ()
 		GetFunction(Player)
 	end
 
-	for _, bottom: TextButton in FrameButtons:GetChildren() do
-		if not bottom:IsA("TextButton") then return end
+	for _, iten: Frame | ImageButton in FrameButtons do
+		if iten:IsA("ImageButton") then
+			iten.MouseButton1Up:Connect(function()
+				directionGui(iten.Name)
+			end)
+		else
+			if iten.Name == "Coins_Frame" then continue end
+			for _, Bottom: ImageButton in iten:GetChildren() do
+				if not Bottom:IsA("ImageButton") then continue end
 
-		bottom.MouseEnter:Connect(function(x, y)
-			local EnterAnimation: Tween = TweenService:Create(bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.28, 0.5)})
-			EnterAnimation:Play() -- 0.28, 0.5
-		end)
+				Bottom.MouseEnter:Connect(function(x, y)
+					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
+					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.35, 0.45)}):Play()
+					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 0}):Play()
+				end)
 
-		bottom.MouseLeave:Connect(function(x, y)
-			local LeaveAnimation: Tween = TweenService:Create(bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.27, 0.4)})
-			LeaveAnimation:Play() -- 0.27, 0.4
-		end)
+				Bottom.MouseLeave:Connect(function(x, y)
+					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
+					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.3, 0.4)}):Play()
+					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 1}):Play()
+				end)
 
-		bottom.MouseButton1Up:Connect(function()
-			directionGui(bottom.Name)
-		end)
+				Bottom.MouseButton1Up:Connect(function()
+					print(Bottom.Name)
+					directionGui(Bottom.Name)
+				end)
+
+			end
+		end
 	end
 end
 
