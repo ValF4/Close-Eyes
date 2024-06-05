@@ -6,7 +6,6 @@ local GuiControl        = require(ReplicatedStorage.ClientServices.GuiControl)
 local HudModule         = require(PlayerScript.GuisModules.HudModule)
 local TimeControler     = require(PlayerScript.GuisModules.TimeControler)
 local UpgradeGui        = require(PlayerScript.GuisModules.UpgradeGui)
-local leaderBordControl = require(PlayerScript.GuisModules.leaderbordControl)
 
 local Bridgnet2         = require(ReplicatedStorage.Packages.BridgeNet2)
 
@@ -19,4 +18,3 @@ end)
 GuiControl:init(Player)
 HudModule:init(Player)
 TimeControler.init()
-leaderBordControl.init()

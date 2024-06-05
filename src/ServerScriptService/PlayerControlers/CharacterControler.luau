@@ -11,7 +11,7 @@ function InitCharacterControler.TeleportService(Player: Player, cord: Vector3): 
 
     local Character: Model = Player.Character
 
-    Character:MoveTo(Vector3.new(cord.X, cord.Y, cord.Z))
+    Character:PivotTo(CFrame.new(cord) * CFrame.Angles(0, math.rad(-120), 0))
 end
 
 function InitCharacterControler.AnchoredCharacterControler(_, Content): ()

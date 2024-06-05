@@ -3,7 +3,7 @@ local ServerControlerModule = {}
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local BillBordControl = require(ReplicatedStorage.GuiModuleControler.BillBordControl)
+local BillboardControl = require(ReplicatedStorage.GuiModuleControler.BillBordControl)
 
 local MaxPlayers: number = 8
 
@@ -18,15 +18,17 @@ function ServerControlerModule.ListControler(Player: Player, Marker: Part, Optio
     
     if not markerTable or #markerTable == MaxPlayers then return end
 
-    if Option == "ADD" then
-        if table.find(markerTable, Player) then return end
-        table.insert(markerTable, Player)
-        BillBordControl.ViewPortControler(Marker.Parent, #markerTable)
-    elseif Option == "REMOVE" then
-        if not table.find(markerTable, Player) then return end
+    local Index = table.find(markerTable, Player) 
 
-        table.remove(markerTable, table.find(markerTable, Player.Name))
-        BillBordControl.ViewPortControler(Marker.Parent, #markerTable)
+    if Option == "ADD" then
+        if Index then return end
+        table.insert(markerTable, Player)
+        BillboardControl.ViewPortControler(Marker.Parent, markerTable)
+    elseif Option == "REMOVE" then
+        if not Index then return end
+
+        table.remove(markerTable, Index)
+        BillboardControl.ViewPortControler(Marker.Parent, markerTable)
     else
         return warn("ERROR - Option Value is invalid")
     end

@@ -9,6 +9,8 @@ local module = {}
 export type ProfileType = {
 	BrowmBottom:number,
 	GoldemBottom:number,
+	Level: number,
+	Xp: number,
 	Inventory:{[string]:{}},
 	Config:{
 		last_time_logged: string,
@@ -24,6 +26,8 @@ export type ProfileType = {
 local profileTemplate:ProfileType = {
 	BrowmBottom = 0,
 	GoldemBottom = 0,
+	Level = 0,
+	Xp = 0,
 	Inventory = {},
 	Config = {
 		last_time_logged = "",
