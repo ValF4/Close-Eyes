@@ -32,18 +32,16 @@ local function OpenGui(Player: Player, Gui: string, CodePosition: UDim2): ()
 
 	if not GuiManager then return end
 
-	local GetBackgroundEffect: ImageLabel = GuiManager:FindFirstChild("Texture")
+	local GetBackgroundEffect: ImageLabel = GuiManager:FindFirstChild("Opacitybackground")
 	local GetMainFrame: Frame = GuiManager:FindFirstChild("MainFrame")
 	if not GetBackgroundEffect or not GetMainFrame then return end
 
 	local OpenFrameAnimation: Tween = TweenService:Create(GetMainFrame, timeInitAnimation, {Position = UDim2.new(CodePosition.X, CodePosition.Y)}) -- {0.173, 0},{-5, 0}
-	local InitBackgroundAnimation: Tween = TweenService:Create(GetBackgroundEffect, timeInitAnimation, {ImageTransparency = 0.6})
-	local infinitAnimationBackground: Tween = TweenService:Create(GetBackgroundEffect, InifinitTimeAnimation, {Position = UDim2.fromScale(1.0, 0.5)})
+	local InitBackgroundAnimation: Tween = TweenService:Create(GetBackgroundEffect, timeInitAnimation, {BackgroundTransparency = 0.5})
 
 	GuiManager.Enabled = true
 
 	OpenFrameAnimation:Play()
-	infinitAnimationBackground:Play()
 	InitBackgroundAnimation:Play()
 
 end
@@ -72,7 +70,7 @@ local function RemoveGui(Player: Player ,FindGui: ScreenGui): ()
 	local GetClosedBottom: ImageButton = GetFrameInGui:FindFirstChild("ExitBottom")
 
 	local function ClosedFrame(): ()
-		local ClosedGuiAnimation: Tween = TweenService:Create(GetFrameInGui, timeInitAnimation, {Position = UDim2.fromScale(0.5, -0.5)})
+		local ClosedGuiAnimation: Tween = TweenService:Create(GetFrameInGui, timeInitAnimation, {Position = UDim2.fromScale(0.5, 2)})
 		ClosedGuiAnimation:Play()
 		ClosedGuiAnimation.Completed:Wait()
 		EffectControler.Controler(Player, false)
@@ -91,10 +89,11 @@ local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
 	if ReplicatedFirst:GetAttribute("UpgradeGui") then return end
 
 	EffectControler.Controler(Player, true)
-	--OpenGui(Player, CallGui, Position)
-	--GuiControl.HudControler(Player, true)
-	--RemoveGui(Player, CallGui)
-	--InGui = CallGui
+	RemoveGui(Player, CallGui)
+	GuiControl.HudControler(Player, true)
+	OpenGui(Player, CallGui, Position)
+
+	InGui = CallGui
 end
 
 local HudBottons = {
@@ -123,7 +122,7 @@ local HudBottons = {
 
 	["ShopBottom"] 	= function(Player)
 		print("ShopBottom")
-		--InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
+		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
 		-- TODO Respective function Gui
 	end,
 
@@ -151,22 +150,19 @@ function GuiControl:init(Player: Player): ()
 	end
 
 	for _, iten: Frame | ImageButton in FrameButtons do
-		if iten:IsA("ImageButton") then
-			iten.MouseButton1Up:Connect(function()
-				directionGui(iten.Name)
-			end)
-		else
-			if iten.Name == "Coins_Frame" then continue end
-			for _, Bottom: ImageButton in iten:GetChildren() do
+		if iten:IsA("Frame") then
+			for _, Bottom in iten:GetChildren() do
 				if not Bottom:IsA("ImageButton") then continue end
 
 				Bottom.MouseEnter:Connect(function(x, y)
+					if Bottom.Name == "BuyGoldemBottom" then return end
 					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
 					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.35, 0.45)}):Play()
 					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 0}):Play()
 				end)
 
 				Bottom.MouseLeave:Connect(function(x, y)
+					if Bottom.Name == "BuyGoldemBottom" then return end
 					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
 					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.3, 0.4)}):Play()
 					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 1}):Play()
