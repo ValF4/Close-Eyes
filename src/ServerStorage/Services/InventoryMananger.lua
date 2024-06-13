@@ -2,6 +2,8 @@
 local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
 
+local TITLE_FUNCTION = "[Inventory Manager] -"
+
 local DataMananger = require(ServerStorage.Services.DataMananger)
 GI = require(ServerStorage.Services.SubServices.Inventorys)
 
@@ -37,6 +39,10 @@ function DataMethods:setCodeActvated(Value:string)
 	self.Config.Codes[Value] = true
 end
 
+function DataMethods:setGoldenBottons(Value:number)
+	if not Value then warn(`{TITLE_FUNCTION} Valor para adicionar Goldem Bottom não encaminhado.`) return end
+	self.GoldemBottom += Value
+end
 
 --------------------------------//--------------------------------------
 module = {}

@@ -10,6 +10,7 @@ local TextHudTransparency: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear
 
 local EffectControler = require(script.GuiEffects)
 local CodeModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.CodeModule)
+local GoldemStoreModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.GoldemStore)
 
 local InGui: string = nil
 
@@ -123,13 +124,12 @@ local HudBottons = {
 	["ShopBottom"] 	= function(Player)
 		print("ShopBottom")
 		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
-		-- TODO Respective function Gui
+
 	end,
 
 	["BuyGoldemBottom"] = function(Player)
-		print("BuyGoldemBottom")
-		--InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
-		-- TODO Respective function Gui
+		InitGui(Player, "BuyGoldemGui", UDim2.fromScale(0.5, 0.5))
+		GoldemStoreModule.init(Player)
 	end,
 }
 
