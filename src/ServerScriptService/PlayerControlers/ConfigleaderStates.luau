@@ -15,12 +15,12 @@ function ConfigleaderStates.Config(player: Player)
     folder.Parent = player
     
     local BrownBottonInstance = Instance.new("IntValue")
-    BrownBottonInstance.Name = "Bottom"
+    BrownBottonInstance.Name = "BrowmBottom"
     BrownBottonInstance.Value = getPlayerData.BrowmBottom
     BrownBottonInstance.Parent = folder
 
     local GoldemBottonInstance = Instance.new("IntValue")
-    GoldemBottonInstance.Name = "Goldem Bottom"
+    GoldemBottonInstance.Name = "GoldemBottom"
     GoldemBottonInstance.Value = getPlayerData.GoldemBottom
     GoldemBottonInstance.Parent = folder
 

@@ -13,7 +13,6 @@ local DataManager = require(ServerStorage.Services.DataMananger)
 local DataControler = require(ServerScriptService.PlayerControlers.DataControler)
 local CodeRecompenseSystem = require(ServerScriptService.PlayerControlers.codeSystem)
 local GameFunctions = require(ServerScriptService.GameFunctions.benchService)
-local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 local ConfigleaderStates = require(ServerScriptService.PlayerControlers.ConfigleaderStates)
 local ProcessReceipt = require(ServerScriptService.GameFunctions.processReceipt)
 
@@ -21,6 +20,7 @@ local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
 local CodeSystemEvent = Bridgnet2.ServerBridge("CodeSystem")
 local GetVersion = Bridgnet2.ServerBridge("GetVersion")
+local FailPurchase = Bridgnet2.ServerBridge("FailPurchase")
 
 DataManager.Init()
 InitMarksServices.InitMarks()
@@ -42,30 +42,26 @@ GetVersion.OnServerInvoke = function(Player: Player): string
     return ChekingUpgrade.GetVersion(Player)
 end
 
---getInformations.OnServerInvoke = function(player)
---    if not player then return end
---    local getinformation = InventoryMananger:GetInventory(player)
---    return getinformation
---end
-
 Players.PlayerAdded:Connect(function(player: Player): ()
     DataControler.NewPlayer(player)
     ConfigleaderStates.Config(player)
     ChekingUpgrade.Checking(player)
 end)
 
-MarketplaceService.PromptProductPurchaseFinished:Connect(function(playerID: Player, ProtuctID: string, Stats: boolean): RBXScriptSignal
-    if not Stats then return end
-    ProcessReceipt.Process(playerID, ProtuctID)
+MarketplaceService.PromptProductPurchaseFinished:Connect(function(PlayerID: Player, ProtuctID: string, Stats: boolean): RBXScriptSignal
+    
+    local Content = {['PlayerID'] = PlayerID, ['Stats'] = Stats}
+    
+    if not Stats then
+        FailPurchase:Fire(Players:GetPlayerByUserId(PlayerID), Content)
+    else
+        ProcessReceipt.Process(PlayerID, ProtuctID, Content)
+    end
 end)
-
---Players.PlayerRemoving:Connect(function(player: Player): ()
---    LeaderBoardControler.LeavePlayer(player)
---end)
 
 --local Variavel = Bridgnet2.ServerBridge("NOMEDOREMOTE")
 
---Variavel.Fire("Player",local content = {contente1,content2})
+--Variavel:Fire("Player",local content = {contente1,content2})
 
 --recerber
 

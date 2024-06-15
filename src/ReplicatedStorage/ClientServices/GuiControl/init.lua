@@ -71,11 +71,12 @@ local function RemoveGui(Player: Player ,FindGui: ScreenGui): ()
 	local GetClosedBottom: ImageButton = GetFrameInGui:FindFirstChild("ExitBottom")
 
 	local function ClosedFrame(): ()
-		local ClosedGuiAnimation: Tween = TweenService:Create(GetFrameInGui, timeInitAnimation, {Position = UDim2.fromScale(0.5, 2)})
+		local ClosedGuiAnimation: Tween = TweenService:Create(GetFrameInGui, timeInitAnimation, {Position = UDim2.fromScale(0.5, -2)})
 		ClosedGuiAnimation:Play()
 		ClosedGuiAnimation.Completed:Wait()
 		EffectControler.Controler(Player, false)
 		GuiControl.HudControler(Player, false)
+		game.StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, true)
 		GetScreemGui.Enabled = false
 		InGui = nil
 		return
@@ -86,15 +87,16 @@ end
 
 local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
 	if not CallGui then return end
-
 	if ReplicatedFirst:GetAttribute("UpgradeGui") then return end
 
+	game.StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
 	EffectControler.Controler(Player, true)
 	RemoveGui(Player, CallGui)
 	GuiControl.HudControler(Player, true)
 	OpenGui(Player, CallGui, Position)
 
 	InGui = CallGui
+	return true
 end
 
 local HudBottons = {
@@ -110,11 +112,6 @@ local HudBottons = {
 		 -- TODO Respective function Gui 
 	end,
 
-	["CalendarBottom"] = function(Player)
-		print("CalendarBottom")
-		 --InitGui(Player, "CreditGui", UDim2.fromScale(0.5, 0.5))
-	end,
-
 	["MissionBottom"] =	function(Player: Player)
 		print("MissionBottom")
 		--InitGui(Player, "CodeGui", UDim2.fromScale(0.5, 0.5))
@@ -123,12 +120,13 @@ local HudBottons = {
 
 	["ShopBottom"] 	= function(Player)
 		print("ShopBottom")
-		InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
+		--InitGui(Player, "ShopGui", UDim2.fromScale(0.5, 0.5))
 
 	end,
 
 	["BuyGoldemBottom"] = function(Player)
-		InitGui(Player, "BuyGoldemGui", UDim2.fromScale(0.5, 0.5))
+		local InitScreem = InitGui(Player, "BuyGoldemGui", UDim2.fromScale(0.5, 0.5))
+		if not InitScreem then return end
 		GoldemStoreModule.init(Player)
 	end,
 }

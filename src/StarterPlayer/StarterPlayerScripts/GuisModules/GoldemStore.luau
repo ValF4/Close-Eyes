@@ -1,13 +1,58 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
-local processPayment = Bridgnet2.ReferenceBridge("processPayment")
+
+local SucessPurchase = Bridgnet2.ReferenceBridge("SucessPurchase")
+local FailPurchase = Bridgnet2.ReferenceBridge("FailPurchase")
+
+local timeInitAnimation: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 
 local GoldemStore = {}
 
+local GUI_IN_SCREEM = UDim2.fromScale(0.5, 0.5)
+local GUI_OFF_SCREEM = UDim2.fromScale(0.5, -2)
+
 local FUNCTION_NAME = "[GOLDEM STORE] "
+
+local function NoticePurchaseNotification(Content: {number | boolean})
+    local Player = Players:GetPlayerByUserId(Content.PlayerID)
+
+    local PlayerGui = Player.PlayerGui
+    local Player_Guis: Folder = PlayerGui.GAME_GUIS
+    local BuyGoldemSreemGui:ScreenGui = Player_Guis.BuyGoldemGui
+
+    local MainBackground: Frame = BuyGoldemSreemGui.MainFrame
+    local ConfirmTemplate: Folder = MainBackground.ConfirmTemplate
+
+    if Content.Stats then
+        local SucessSecureFrame: Frame = ConfirmTemplate.SucessSecureFrame
+        local SucessFrame: Frame = SucessSecureFrame.SucessMensager
+        local SucessBackground: ImageLabel = SucessFrame.Background
+
+        SucessSecureFrame.Visible = true
+
+        TweenService:Create(SucessSecureFrame, timeInitAnimation, {Position = GUI_IN_SCREEM}):Play()
+
+        SucessBackground.ConfirmBottom.MouseButton1Down:Connect(function()
+            TweenService:Create(SucessSecureFrame, timeInitAnimation, {Position = GUI_OFF_SCREEM}):Play()
+        end)
+    else
+        local FailSecureFrame: Frame = ConfirmTemplate.FailSecureFrame
+        local FailFrame: Frame = FailSecureFrame.FailMensager
+        local FailBackground: ImageLabel = FailFrame.Backgroun
+
+        FailSecureFrame.Visible = true
+
+        TweenService:Create(FailSecureFrame, timeInitAnimation, {Position = GUI_IN_SCREEM}):Play()
+
+        FailBackground.ConfirmBottom.MouseButton1Down:Connect(function()
+            TweenService:Create(FailSecureFrame, timeInitAnimation, {Position = GUI_OFF_SCREEM}):Play()
+        end)
+    end
+end
 
 function GoldemStore.init(Player: Player)
 
@@ -20,10 +65,12 @@ function GoldemStore.init(Player: Player)
     local BuyGoldemSreemGui:ScreenGui = Player_Guis.BuyGoldemGui
 
     local MainFrame: Frame = BuyGoldemSreemGui.MainFrame
-    local CloseBottom: ImageButton = MainFrame.ExitBottom
+    local CloseBottom = MainFrame.ExitBottom
     local TemplateFolder: Folder = MainFrame.TemplateIten
     local templateIten: ImageLabel = TemplateFolder.Template
     local BackgroundButtonList: Frame = MainFrame.ItensBackground
+
+    local ConfirmFolder: Folder = MainFrame.ConfirmTemplate
     
     for i: number, iten: {[string]: string} in ListItens do
         
@@ -45,10 +92,18 @@ function GoldemStore.init(Player: Player)
     end
 
     CloseBottom.MouseButton1Down:Connect(function()
+        for _, Iten: Frame in ConfirmFolder:GetChildren() do
+            if Iten.Position == GUI_IN_SCREEM then
+                Iten.Position = GUI_OFF_SCREEM
+            end
+        end
         for _: number, iten: ImageLabel | UIAspectRatioConstraint | UIPadding | UIListLayout in BackgroundButtonList:GetChildren() do
             if iten:IsA("ImageLabel") then iten:Destroy() end
         end
     end)
+
+    FailPurchase:Connect(function(Content: {number | boolean}) NoticePurchaseNotification(Content) end)
+    SucessPurchase:Connect(function(Content: {number | boolean}) NoticePurchaseNotification(Content) end)
 end
 
 return GoldemStore
