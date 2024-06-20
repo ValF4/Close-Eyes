@@ -9,24 +9,9 @@ local MissionList = require(ServerScriptService.ServerLists.MissionsList)
 local MissionModule = {}
 
 local WeekSecond: number = 604800
-
-local function UpgradeMissionList(Player: Player): ()
-    local PlayerData
-    local PlayerMissionList
-    local i: number = 1
-
-    while task.wait() do
-        PlayerData = InventoryManager:GetInventory(Player)
-        PlayerMissionList = PlayerData.Missions
-        if #PlayerMissionList == 0 then i = 1 return end
-        PlayerData:RemoveMission(i)
-        i += 1
-    end
-end
+local MaxMissions: number = 4
 
 local function SetMissions(Player: Player): ()
-
-
     while task.wait() do
 
         local PlayerData = InventoryManager:GetInventory(Player)
@@ -52,6 +37,23 @@ local function SetMissions(Player: Player): ()
         
         Index += 1
     end
+end
+
+local function UpgradeMissionList(Player: Player): ()
+    local PlayerData
+    local PlayerMissionList
+    local i: number = 1
+
+    while task.wait() do
+        PlayerData = InventoryManager:GetInventory(Player)
+        PlayerMissionList = PlayerData.Missions
+        if #PlayerMissionList == 0 then i = 1 return end
+        PlayerData:RemoveMission(i)
+        i += 1
+    end
+
+    SetMissions(Player)
+
 end
 
 local function CheskingNewPlayer(PlayerData)
