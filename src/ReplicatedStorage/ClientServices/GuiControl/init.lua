@@ -9,7 +9,7 @@ local BottomMouseAnimation: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linea
 local TextHudTransparency: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 
 local EffectControler = require(script.GuiEffects)
-local CodeModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.CodeModule)
+local MissionsModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.MissionModule)
 local GoldemStoreModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.GoldemStore)
 
 local InGui: string = nil
@@ -17,7 +17,6 @@ local InGui: string = nil
 local GuiControl: {} = {}
 
 local TextBottons = {
-	CalendarBottom 		= "Daily Rewards",
 	MissionBottom 		= "Missions",
 	InventoryBottom 	= "Inventory",
 	ShopBottom 			= "Shop",
@@ -113,9 +112,9 @@ local HudBottons = {
 	end,
 
 	["MissionBottom"] =	function(Player: Player)
-		print("MissionBottom")
-		--InitGui(Player, "CodeGui", UDim2.fromScale(0.5, 0.5))
-		--CodeModule:init(Player)
+		local InitScreem = InitGui(Player, "MissionsGui", UDim2.fromScale(0.5, 0.5))
+		if not InitScreem then return end
+		MissionsModule.init(Player)
 	end,
 
 	["ShopBottom"] 	= function(Player)

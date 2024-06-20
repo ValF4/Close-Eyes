@@ -5,6 +5,7 @@ local ServerStorage =  game:GetService("ServerStorage")
 local Players = game:GetService("Players")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
+local MissionModule = require(ServerScriptService.PlayerControlers.MissionModule)
 local ChekingUpgrade = require(ServerScriptService.PlayerControlers.CheckingUpgrade)
 local BillBordControl = require(ReplicatedStorage.GuiModuleControler.BillBordControl)
 local CharacterControler = require(ServerScriptService.PlayerControlers.CharacterControler)
@@ -46,6 +47,7 @@ Players.PlayerAdded:Connect(function(player: Player): ()
     DataControler.NewPlayer(player)
     ConfigleaderStates.Config(player)
     ChekingUpgrade.Checking(player)
+    MissionModule.CheckingMissions(player)
 end)
 
 MarketplaceService.PromptProductPurchaseFinished:Connect(function(PlayerID: Player, ProtuctID: string, Stats: boolean): RBXScriptSignal

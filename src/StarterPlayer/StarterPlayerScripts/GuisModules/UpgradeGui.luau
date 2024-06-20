@@ -12,8 +12,8 @@ local DefaltAnimation: TweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Linear)
 local upgradeGui = {}
 local InUpgradeGui: {TextLabel} = {}
 
-function upgradeGui.InitGui(Version: string): ()
-    if not Version then return end
+function upgradeGui.InitGui(Content: {string}): ()
+    if not Content then return end
 
     local GetPlayerGui: PlayerGui = Player.PlayerGui
 
@@ -29,11 +29,10 @@ function upgradeGui.InitGui(Version: string): ()
 
     if not GetUpgradeGui or not CloseBottom then return end
 
-    local GetUpgradeList: {} = UpgradeList[Version]
+    local GetUpgradeList: {} = UpgradeList[Content.GetVersion]
     if not GetUpgradeList then return end
 
     repeat task.wait() until not ReplicatedFirst:GetAttribute("IN_WELCOME")
-
     GetUpgradeGui.Enabled = true
     ReplicatedFirst:SetAttribute("UpgradeGui", true)
 

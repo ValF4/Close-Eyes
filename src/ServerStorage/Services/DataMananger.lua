@@ -13,30 +13,28 @@ export type ProfileType = {
 	Xp: number,
 	Inventory:{[string]:{}},
 	Config:{
-		last_time_logged: string,
 		Codes: {boolean},
-		Version: string,
+		Version: number,
 		VolumeMusic: number,
 		AmbientVolume: number,
 		Shadow_disabled: boolean,
-		Game_quality: string,
 	}
 }
 
 local profileTemplate:ProfileType = {
+	lastEntry = 0,
 	BrowmBottom = 0,
 	GoldemBottom = 0,
 	Level = 0,
 	Xp = 0,
 	Inventory = {},
+	Missions = {},
 	Config = {
-		last_time_logged = "",
 		Codes = {},
-		Version = "",
+		Version = 1,
 		VolumeMusic = 100,
 		AmbientVolume = 100,
 		Shadow_disabled = false,
-		Game_quality = "normal"
 	},
 }	
 
@@ -56,7 +54,7 @@ local profileStore = ProfileService.GetProfileStore("PlayerProfileData", profile
 
 function onPlayerAdded(player)
 	
-	local profile = profileStore:LoadProfileAsync(`{player.UserId}`)
+	local profile = profileStore:LoadProfileAsync(`{player.UserId}`, "ForceLoad")
 	
 	profile:AddUserId(player.UserId)
 	profile:Reconcile() -- Sincroniza a data do player com o template
@@ -86,6 +84,8 @@ end
 function module:GetData(player): {any}
 	
 	local profile = profiles[player.UserId]
+
+	local tries = 1
 	
 	while not profile and player:IsDescendantOf(players) do
 		
@@ -93,18 +93,17 @@ function module:GetData(player): {any}
 		
 		if profile then break end
 		
-		task.wait(.4)
+		task.wait(.1 * tries)
+		tries += 1
 	end
 	
-	if profile then
-		return profile.Data
-	end
+	return profile.Data
 	
 end
 
 function module.Init()
 	
-	for index, player in players:GetPlayers() do
+	for _, player in players:GetPlayers() do
 		task.spawn(onPlayerAdded, player)
 	end
 	

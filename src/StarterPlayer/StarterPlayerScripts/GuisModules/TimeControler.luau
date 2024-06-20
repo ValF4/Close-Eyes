@@ -6,6 +6,7 @@ local Player: Player = Players.LocalPlayer
 local PlayerGui: PlayerGui = Player.PlayerGui
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
+local UpgradeList = require(ReplicatedStorage.ClientServices.ModuleLists.Upgrades)
 
 local GET_VERSION = Bridgnet2.ReferenceBridge("GetVersion")
 
@@ -13,9 +14,9 @@ local timeControler = {}
 
 local function GetVersion(): ()
     if not Player then return end
-    local version: string = GET_VERSION:InvokeServerAsync(Player)
+    local version: string = UpgradeList[GET_VERSION:InvokeServerAsync(Player)].Version
     return version
-end
+end 
 
 function timeControler:init(): ()
     local HudScreem: ScreenGui = PlayerGui:WaitForChild("Hud")

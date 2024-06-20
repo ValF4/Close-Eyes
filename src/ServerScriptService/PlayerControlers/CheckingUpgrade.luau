@@ -22,10 +22,12 @@ function CheckingUpgrade.Checking(Player: Player): ()
     local GetPlayerVersion: string = GetPlayerData.Config.Version
 
    -- if GetPlayerVersion == GetVersion then return end -- TODO Ativar assim que o jogo estiver pronto
- 
-    GetPlayerData:setVersion(GetVersion)
 
-    exchangeVersion:Fire(Player, GetVersion)
+    local Content = {['GetVersion'] = GetVersion, ['GetPlayerVersion'] = GetPlayerVersion}
+
+    --GetPlayerData:setVersion(GetVersion) -- TODO Ativar assim que o jogo estiver pronto
+
+    exchangeVersion:Fire(Player, Content)
 end
 
 return CheckingUpgrade

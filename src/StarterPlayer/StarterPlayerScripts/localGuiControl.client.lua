@@ -11,9 +11,7 @@ local Bridgnet2         = require(ReplicatedStorage.Packages.BridgeNet2)
 
 local exchangeVersion   = Bridgnet2.ClientBridge("exchangeVersion")
 
-exchangeVersion:Connect(function(Version: string): ()
-    UpgradeGui.InitGui(Version)
-end)
+exchangeVersion:Connect(function(Content: {string}): () UpgradeGui.InitGui(Content) end)
 
 GuiControl:init(Player)
 HudModule:init(Player)

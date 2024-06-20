@@ -44,6 +44,25 @@ function DataMethods:setGoldenBottons(Value:number)
 	self.GoldemBottom += Value
 end
 
+function DataMethods:setLastEntry(Value: number)
+	if not Value then warn(`{TITLE_FUNCTION} O valor de Tick não foi enviado para a função.`) return end
+	self.lastEntry += Value
+end
+
+function DataMethods:UpgradeMissions(Value)
+	if not Value then warn(`{TITLE_FUNCTION} O valor de missões não foi enviado para a função`) return end
+end
+
+function DataMethods:SetMissions(Value)
+	if not Value then warn(`{TITLE_FUNCTION} O valor de missões não foi enviado para a função`) return end
+	table.insert(self.Missions, Value)
+end
+
+function DataMethods:RemoveMission(Value)
+	if not Value then warn(`{TITLE_FUNCTION} O valor de missões não foi enviado para a função`) return end
+	self.Missions[Value] = nil
+end
+
 --------------------------------//--------------------------------------
 module = {}
 
@@ -59,12 +78,12 @@ function PlayerRemoving(Player)
 	GI[Player.UserId] = nil
 end
 
-local function GetInventory (Player)
+local function GetInventory(Player)
 	local InvTemp
     if typeof(Player) == "number" then
-        InvTemp   = GI[Player]
+        InvTemp = GI[Player]
     else     
-        InvTemp = GI[Player.UserId]
+        InvTemp	= GI[Player.UserId]
     end     
 
     return InvTemp
