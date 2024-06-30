@@ -12,6 +12,9 @@ local EffectControler = require(script.GuiEffects)
 local MissionsModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.MissionModule)
 local GoldemStoreModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.GoldemStore)
 
+local OriginalBottomSize: UDim2 = UDim2.fromScale(0.3, 0.4)
+local UppcaseBottomSize: UDim2 = UDim2.fromScale(0.35, 0.45)
+
 local InGui: string = nil
 
 local GuiControl: {} = {}
@@ -22,6 +25,28 @@ local TextBottons = {
 	ShopBottom 			= "Shop",
 	ConfigBottom		= "Config"
 }
+
+local function ResetSizeIcons(Player: Player): ()
+	local PlayerGui: PlayerGui = Player.PlayerGui
+	local Hud: ScreenGui = PlayerGui.Hud
+
+	local HudFrames = {
+		["ConfigFrame"] = Hud.Config_Frame,
+		["Players Tools Frame"] = Hud.Players_Tools_Frame
+	}
+
+	for _, Frame: Frame in HudFrames do
+		for _, Iten in Frame:GetChildren() do
+			if Iten:IsA("ImageButton") then
+				Iten.Size = OriginalBottomSize
+			elseif Iten:IsA("TextLabel") then
+				Iten.TextTransparency = 1
+			else
+				continue
+			end
+		end
+	end
+end
 
 local function OpenGui(Player: Player, Gui: string, CodePosition: UDim2): ()
 	if not Player or not Gui then return end
@@ -92,6 +117,7 @@ local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
 	EffectControler.Controler(Player, true)
 	RemoveGui(Player, CallGui)
 	GuiControl.HudControler(Player, true)
+	ResetSizeIcons(Player)
 	OpenGui(Player, CallGui, Position)
 
 	InGui = CallGui
@@ -154,14 +180,14 @@ function GuiControl:init(Player: Player): ()
 				Bottom.MouseEnter:Connect(function(x, y)
 					if Bottom.Name == "BuyGoldemBottom" then return end
 					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
-					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.35, 0.45)}):Play()
+					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UppcaseBottomSize}):Play()
 					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 0}):Play()
 				end)
 
 				Bottom.MouseLeave:Connect(function(x, y)
 					if Bottom.Name == "BuyGoldemBottom" then return end
 					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
-					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UDim2.fromScale(0.3, 0.4)}):Play()
+					TweenService:Create(Bottom, BottomMouseAnimation, {Size = OriginalBottomSize}):Play()
 					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 1}):Play()
 				end)
 
