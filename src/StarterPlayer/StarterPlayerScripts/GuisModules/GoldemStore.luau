@@ -42,7 +42,7 @@ local function NoticePurchaseNotification(Content: {number | boolean})
     else
         local FailSecureFrame: Frame = ConfirmTemplate.FailSecureFrame
         local FailFrame: Frame = FailSecureFrame.FailMensager
-        local FailBackground: ImageLabel = FailFrame.Backgroun
+        local FailBackground: ImageLabel = FailFrame.Background
 
         FailSecureFrame.Visible = true
 
