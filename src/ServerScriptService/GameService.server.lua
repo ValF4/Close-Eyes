@@ -47,7 +47,7 @@ Players.PlayerAdded:Connect(function(player: Player): ()
     DataControler.NewPlayer(player)
     ConfigleaderStates.Config(player)
     ChekingUpgrade.Checking(player)
-    MissionModule.CheckingMissions(player)
+    MissionModule.CheskingNewPlayer(player)
 end)
 
 MarketplaceService.PromptProductPurchaseFinished:Connect(function(PlayerID: Player, ProtuctID: string, Stats: boolean): RBXScriptSignal

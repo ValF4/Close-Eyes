@@ -14,15 +14,16 @@ local ProductValues = {
     ['1845882822'] = 600,
     ['1845884418'] = 1750,
     ['1845886313'] = 3000
-} 
+}
 
 local function ProductAdministrator(PlayerID: string, Value: number)
     if not PlayerID then warn(`{FUNCTION_TITLE} Valor de player não foi enviado para a função.`) return end
     local getPlayerInventory = InventoryMananger:GetInventory(PlayerID)
     getPlayerInventory:setGoldenBottons(Value, PlayerID)
     PlayerUpgrade.upgradeInfos(PlayerID)
-    MissionModule.CheckingMissionsStatus(Value, PlayerID, MissionReference)
-end
+    local List = {["Value"] = Value, ["ReferenceMission"] = MissionReference}
+    MissionModule.CheckingMissionsStatus(PlayerID, List)
+end 
 
 local productList = {
     ['1845872803'] = function(playerID: string) ProductAdministrator(playerID, ProductValues["1845872803"]) end, -- Compra de 100 Goldem Bottons

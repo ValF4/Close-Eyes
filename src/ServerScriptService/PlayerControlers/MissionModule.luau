@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -6,36 +7,62 @@ local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local InventoryManager = require(ServerStorage.Services.InventoryMananger)
 local MissionList = require(ServerScriptService.ServerLists.MissionsList)
 
+local GetMissions = Bridgnet2.ServerBridge("GET_MISSIONS")
+
 local MissionModule = {}
 
 local WeekSecond: number = 604800
 local MaxMissions: number = 4
 
+local MissionsTypes = {
+    ["GoldemCollet"] = {
+        "MISSION_1",
+    },
+
+    ["BrowmCollet"] = {
+        "MISSION_7"
+    },
+
+    ["SequenceWins"] = {
+        "MISSION_5"
+    },
+
+    ["BallonsCollet"] = {
+        "MISSION_3"
+    },
+
+    ["RuningMap"] = {
+        "MISSION_4"
+    },
+
+    ["WinEpicItens"] = {
+        "MISSION_2"
+    },
+
+    ["stereggMap"] = {
+        "MISSION_6"
+    }
+}
+
+local function HasMission(playerData, missionId): boolean
+    for index, missionInfo in playerData.Missions do
+      if missionInfo.MissionID == missionId then return false end
+    end
+    return true
+end
+
 local function SetMissions(Player: Player): ()
     while task.wait() do
+        local playerData = InventoryManager:GetInventory(Player)
+        local playerMissions = playerData.Missions
+        local missionInfo = MissionList[math.random(1, #MissionList)]
+      
+        if #playerMissions >= 4 then break end
+        if not HasMission(playerData, missionInfo.MissionID) then break end
+     
+        local missionData = {["MissionID"] = missionInfo.MissionID, ["Progress"] = 0}
+        playerData:SetMission(missionData)
 
-        local PlayerData = InventoryManager:GetInventory(Player)
-        local GetMissionList = PlayerData.Missions
-        local RandomNumber: number = math.random(1, #MissionList)
-
-        if #GetMissionList == 0 then
-            local CreateContent = {["MissionID"] = MissionList[RandomNumber].MissionID, ["Progress"] = 0}
-            PlayerData:SetMissions(CreateContent)
-        end
-
-        local Index: number = 1
-
-        if #GetMissionList >= 4 then Index = nil break end
-
-        local GetMission = MissionList[RandomNumber]
-
-        if GetMission.MissionID == GetMissionList[Index].MissionID then continue end
-
-        local CreateContent = {["MissionID"] = GetMission.MissionID, ["Progress"] = 0}
-        
-        PlayerData:SetMissions(CreateContent)
-        
-        Index += 1
     end
 end
 
@@ -47,40 +74,50 @@ local function UpgradeMissionList(Player: Player): ()
     while task.wait() do
         PlayerData = InventoryManager:GetInventory(Player)
         PlayerMissionList = PlayerData.Missions
-        if #PlayerMissionList == 0 then i = 1 return end
+        if #PlayerMissionList == 0 then i = 1 break end
         PlayerData:RemoveMission(i)
         i += 1
     end
 
     SetMissions(Player)
-
 end
 
-local function CheskingNewPlayer(PlayerData)
-    if PlayerData.lastEntry == 0 or not PlayerData.lastEntry then
-        PlayerData:setLastEntry(math.floor(tick() / WeekSecond))
-        return true
-    end
-    return
-end
 
-local function ChekingUpgradeDay(PlayerDB)
-    local CurrentWeek: number = math.floor(tick() / WeekSecond)
-    local PlayerWeek: number = math.floor(PlayerDB.lastEntry / WeekSecond)
-
-    if CurrentWeek ~= PlayerWeek then return true end
-    return
-end
-
-function MissionModule.CheckingMissions(Player: Player)
+function MissionModule.CheskingNewPlayer(Player: Player): ()
     local PlayerData = InventoryManager:GetInventory(Player)
-    local CheckingNewPlayer: boolean = CheskingNewPlayer(PlayerData)
-    local CheckingUpgradeDate: boolean = ChekingUpgradeDay(PlayerData)
 
-    if CheckingNewPlayer then SetMissions(Player) end
-    if CheckingNewPlayer then UpgradeMissionList(Player) end
+    local lastUpdate = PlayerData.lastEntry or 0
 
-    return
+    local lastWeek = math.floor(lastUpdate/WeekSecond)
+    local week = math.floor(tick()/WeekSecond)
+  
+    if lastWeek ~= week then
+        PlayerData:setLastEntry(math.floor(week * WeekSecond))
+        UpgradeMissionList(Player)
+    end
 end
+
+function MissionModule.GetMissions(Player: Player): {string}
+    if not Player then return end
+    local GetPlayerData = InventoryManager:GetInventory(Player)
+    return GetPlayerData.Missions
+end
+
+function MissionModule.CheckingMissionsStatus(PlayerID: string, List: {[string]: string | number})
+    local PlayerData = InventoryManager:GetInventory(Players:GetPlayerByUserId(PlayerID))
+    local PlayerMissionList = PlayerData.Missions
+    local MissionsList: {[string]: string} = MissionsTypes[List.ReferenceMission]
+
+    if not MissionList then return end
+
+    for _: number, MissionList: string in MissionsList do
+        for index: number, Mission: {[string]: string | number} in PlayerMissionList do
+            if MissionList ~= Mission.MissionID or Mission.Progress == 100 then continue end
+            PlayerData:SetProcress(index, List.Value) -- TODO: Criar a função de soma do valor para ser de 0 a 100
+        end
+    end
+end
+
+GetMissions.OnServerInvoke = function(Player): () return MissionModule.GetMissions(Player) end
 
 return MissionModule
