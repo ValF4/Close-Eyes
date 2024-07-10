@@ -11,19 +11,20 @@ local TextHudTransparency: TweenInfo = TweenInfo.new(.2, Enum.EasingStyle.Linear
 local EffectControler = require(script.GuiEffects)
 local MissionsModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.MissionModule)
 local GoldemStoreModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.GoldemStore)
+local InventoryModule = require(StarterPlayer.StarterPlayerScripts.GuisModules.InventoryModule)
 
-local OriginalBottomSize: UDim2 = UDim2.fromScale(0.3, 0.4)
-local UppcaseBottomSize: UDim2 = UDim2.fromScale(0.35, 0.45)
+local OriginalBottomSize: UDim2 = UDim2.fromScale(0.26, 0.205)
+local UppcaseBottomSize: UDim2 = UDim2.fromScale(0.33, 0.295)
 
 local InGui: string = nil
 
 local GuiControl: {} = {}
 
 local TextBottons = {
-	MissionBottom 		= "Missions",
-	InventoryBottom 	= "Inventory",
-	ShopBottom 			= "Shop",
-	ConfigBottom		= "Config"
+	MissionBottom 		= {OriginalBottomSize = UDim2.fromScale(0.26, 0.205),UppcaseBottomSize = UDim2.fromScale(0.33, 0.295), Name = "Missions",},
+	InventoryBottom 	= {OriginalBottomSize = UDim2.fromScale(0.26, 0.205),UppcaseBottomSize = UDim2.fromScale(0.33, 0.295), Name = "Inventory",},
+	ShopBottom 			= {OriginalBottomSize = UDim2.fromScale(0.26, 0.205),UppcaseBottomSize = UDim2.fromScale(0.33, 0.295), Name = "Shop",},
+	ConfigBottom		= {OriginalBottomSize = UDim2.fromScale(0.26, 0.535),UppcaseBottomSize = UDim2.fromScale(0.33, 0.650), Name = "Config",},
 }
 
 local function ResetSizeIcons(Player: Player): ()
@@ -109,9 +110,8 @@ local function RemoveGui(Player: Player ,FindGui: ScreenGui): ()
 	GetClosedBottom.MouseButton1Down:Connect(ClosedFrame)
 end
 
-local function InitGui(Player: Player, CallGui: string, Position: UDim2): ()
-	if not CallGui then return end
-	if ReplicatedFirst:GetAttribute("UpgradeGui") then return end
+local function InitGui(Player: Player, CallGui: string, Position: UDim2): boolean
+	if not CallGui and ReplicatedFirst:GetAttribute("UpgradeGui") then return end
 
 	game.StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
 	EffectControler.Controler(Player, true)
@@ -126,9 +126,9 @@ end
 
 local HudBottons = {
 	["InventoryBottom"]	= function(Player: Player)
-		print("InventoryBottom")
-		--InitGui(Player, "InventoryGui", UDim2.fromScale(0.5, 0.5))
-		-- TODO Respective function Gui 
+		local InitScreem = InitGui(Player, "InventoryGui", UDim2.fromScale(0.5, 0.5))
+		if not InitScreem then return end
+		InventoryModule.init(Player)
 	end,
 
 	["ConfigBottom"] =function(Player)
@@ -162,9 +162,6 @@ function GuiControl:init(Player: Player): ()
 
 	local FrameButtons: Frame = hud:GetChildren()
 
-	local Db: boolean
-	local OcultHud: boolean
-
 	local function directionGui(Name: string): ()
 		if not Name then return end
 		local GetFunction = HudBottons[Name]
@@ -175,19 +172,20 @@ function GuiControl:init(Player: Player): ()
 	for _, iten: Frame | ImageButton in FrameButtons do
 		if iten:IsA("Frame") then
 			for _, Bottom in iten:GetChildren() do
+
 				if not Bottom:IsA("ImageButton") then continue end
 
-				Bottom.MouseEnter:Connect(function(x, y)
+				Bottom.MouseEnter:Connect(function(): ()
 					if Bottom.Name == "BuyGoldemBottom" then return end
-					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
-					TweenService:Create(Bottom, BottomMouseAnimation, {Size = UppcaseBottomSize}):Play()
+					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name].Name)
+					TweenService:Create(Bottom, BottomMouseAnimation, {Size = TextBottons[Bottom.Name].UppcaseBottomSize}):Play()
 					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 0}):Play()
 				end)
 
-				Bottom.MouseLeave:Connect(function(x, y)
+				Bottom.MouseLeave:Connect(function(): ()
 					if Bottom.Name == "BuyGoldemBottom" then return end
-					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name])
-					TweenService:Create(Bottom, BottomMouseAnimation, {Size = OriginalBottomSize}):Play()
+					local GetText: TextLabel = Bottom.Parent:FindFirstChild(TextBottons[Bottom.Name].Name)
+					TweenService:Create(Bottom, BottomMouseAnimation, {Size = TextBottons[Bottom.Name].OriginalBottomSize}):Play()
 					TweenService:Create(GetText, TextHudTransparency, {TextTransparency = 1}):Play()
 				end)
 
