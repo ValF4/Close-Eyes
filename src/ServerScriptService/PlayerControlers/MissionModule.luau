@@ -3,11 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
 
-local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local InventoryManager = require(ServerStorage.Services.InventoryMananger)
 local MissionList = require(ServerScriptService.ServerLists.MissionsList)
-
-local GetMissions = Bridgnet2.ServerBridge("GET_MISSIONS")
 
 local MissionModule = {}
 
@@ -113,11 +110,10 @@ function MissionModule.CheckingMissionsStatus(PlayerID: string, List: {[string]:
     for _: number, MissionList: string in MissionsList do
         for index: number, Mission: {[string]: string | number} in PlayerMissionList do
             if MissionList ~= Mission.MissionID or Mission.Progress == 100 then continue end
-            PlayerData:SetProcress(index, List.Value) -- TODO: Criar a função de soma do valor para ser de 0 a 100
+            -- TODO: Criar a função de soma do valor para ser de 0 a 100
+            PlayerData:SetProcress(index, List.Value) 
         end
     end
 end
-
-GetMissions.OnServerInvoke = function(Player): () return MissionModule.GetMissions(Player) end
 
 return MissionModule
