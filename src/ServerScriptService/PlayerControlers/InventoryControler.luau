@@ -31,13 +31,13 @@ function inventoryControler.AddItem(Player: Player, Item: string): boolean?
     if not Item then warn(`{MODULE_NAME} - Item name is nil or invalid.`) return end
     local PlayerData = InventoryManager:GetInventory(Player)
     if not PlayerData then return end
-
 end
 
 function inventoryControler.ReplaceMask(Player: Player, Item: string): ()
     local PlayerData = InventoryManager:GetInventory(Player)
     if not PlayerData then return end
     PlayerData:equipMask(Item)
+    return true
 end
 
 function inventoryControler.GetInventory(Player: Player): {} return InventoryManager:GetInventory(Player).Inventory end

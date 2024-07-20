@@ -77,9 +77,6 @@ function ViewControler(Player: Player, Item: string)
     inView = true
   end
 
-  print(CurrentMask)
-  print(CurrentFrame)
-
   if CurrentMask ~= CurrentFrame then
     local Exit
     MaskNameLabel.Text = Masks[Item].Name
@@ -87,9 +84,12 @@ function ViewControler(Player: Player, Item: string)
     EquipBottom.Text = "Equip"
   
     local connectEquibottom = EquipBottom.MouseButton1Click:Connect(function()
-      --if CurrentMask == Item then print("Sua mascara ja é esta") end
-      print(CurrentMask, Item)
-      --EquipItem:InvokeServerAsync(Player, Item)
+      local equipStatus = EquipItem:InvokeServerAsync(Player, Item)
+      if equipStatus then
+          EquipBottom.Text = "Equipped item"
+          task.wait(.5)
+          EquipBottom.Text = "Equip"
+      end
     end)
   
     Exit = ExitBottom.MouseButton1Down:Connect(function() connectEquibottom:Disconnect() Exit:Disconnect() end)
