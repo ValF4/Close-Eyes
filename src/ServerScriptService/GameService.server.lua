@@ -16,12 +16,17 @@ local CodeRecompenseSystem = require(ServerScriptService.PlayerControlers.codeSy
 local GameFunctions = require(ServerScriptService.GameFunctions.benchService)
 local ConfigleaderStates = require(ServerScriptService.PlayerControlers.ConfigleaderStates)
 local ProcessReceipt = require(ServerScriptService.GameFunctions.processReceipt)
+local InventoryModule = require(ServerScriptService.PlayerControlers.InventoryControler)
 
 local TeleportPlayerEvent = Bridgnet2.ServerBridge("TeleportPlayer")
 local AnchoredPlayerEvent = Bridgnet2.ServerBridge("AnchoredPlayer")
 local CodeSystemEvent = Bridgnet2.ServerBridge("CodeSystem")
 local GetVersion = Bridgnet2.ServerBridge("GetVersion")
 local FailPurchase = Bridgnet2.ServerBridge("FailPurchase")
+local GetPlayerInventory = Bridgnet2.ServerBridge("GET_INVENTORY")
+local GetMissions = Bridgnet2.ServerBridge("GET_MISSIONS")
+local EquipItem = Bridgnet2.ServerBridge("EQUIP_ITEM")
+local GetCurrentMask = Bridgnet2.ServerBridge("GET_CURRENT_MASK")
 
 DataManager.Init()
 InitMarksServices.InitMarks()
@@ -32,6 +37,25 @@ GameFunctions.benchinit()
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3): () CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean): () CharacterControler.AnchoredCharacterControler(Player, State) end)
 
+EquipItem.OnServerInvoke = function(Player:Player , Item: string): ()
+    if not Player or not Item then return end
+    return InventoryModule.ReplaceMask(Player, Item)
+end
+
+GetCurrentMask.OnServerInvoke = function(Player: Player): ()
+    if not Player then return end
+    return InventoryModule.CurrentMask(Player)
+end
+
+GetPlayerInventory.OnServerInvoke = function(Player: Player): {}
+    if not Player then return end
+    return InventoryModule.GetInventory(Player)
+end
+
+GetMissions.OnServerInvoke = function(Player): ()
+    if not Player then return end
+    return MissionModule.GetMissions(Player)
+end
 
 CodeSystemEvent.OnServerInvoke = function(Player: Player?, codeInInput: string?): boolean
     if not codeInInput then return end 
@@ -46,6 +70,7 @@ end
 Players.PlayerAdded:Connect(function(player: Player): ()
     DataControler.NewPlayer(player)
     ConfigleaderStates.Config(player)
+    InventoryModule.CheckingNewPlayer(player)
     ChekingUpgrade.Checking(player)
     MissionModule.CheskingNewPlayer(player)
 end)

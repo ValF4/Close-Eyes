@@ -40,7 +40,17 @@ function DataMethods:setCodeActvated(Value:string)
 	self.Config.Codes[Value] = true
 end
 
-function DataMethods:setGoldenBottons(Value:number, PlayerID: string)
+function DataMethods:equipMask(Value:string)
+	if not Value then return end
+	self.CurrentMask = Value
+end
+
+function DataMethods:setItenInInventory(Value:number)
+	if not Value then warn(`{TITLE_FUNCTION} Valor para adicionar item no inventario não encaminhado.`) return end
+	table.insert(self.Inventory, Value)
+end
+
+function DataMethods:setGoldenBottons(Value:number)
 	if not Value then warn(`{TITLE_FUNCTION} Valor para adicionar Goldem Bottom não encaminhado.`) return end
 	self.GoldemBottom += Value
 end
@@ -53,10 +63,6 @@ end
 function DataMethods:SetProcress(location: number ,Value: number)
 	if not Value then warn(`{TITLE_FUNCTION} O valor de Tick não foi enviado para a função.`) return end
 	self.Missions[location].Progress = Value
-end
-
-function DataMethods:UpgradeMissions(Value)
-	if not Value then warn(`{TITLE_FUNCTION} O valor de missões não foi enviado para a função`) return end
 end
 
 function DataMethods:SetMission(Value)

@@ -25,7 +25,8 @@ function MissionModule.init(Player: Player)
         local MissionTemplate: ImageLabel = Templates.MissionTemplate:Clone()
         MissionTemplate.TitleMission.Text = GetMissionInfos.Name
         MissionTemplate.DescriptionMission.Text = GetMissionInfos.Description
-        MissionTemplate.ProgressBar.Progress.percentage.Text = `{Mission.Progress}/{GetMissionInfos.Total_Mission}`
+        MissionTemplate.ProgressBar.Progress.percentage.Text = `{Mission.Progress}%/100%`
+        --MissionTemplate.ProgressBar.Progress.Size = UDim2.fromScale()
 
         for index, value in GetMissionInfos.Recompenses do
             local RecompenseTemplate: ImageLabel = Templates.RecompenseBackground:Clone()

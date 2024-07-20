@@ -12,8 +12,10 @@ export type ProfileType = {
 	Level: number,
 	Xp: number,
 	Inventory:{[string]:{}},
+	CurrentMask: string,
+	Missions: {string},
 	Config:{
-		Codes: {boolean},
+		Codes: {[string]: string},
 		Version: number,
 		VolumeMusic: number,
 		AmbientVolume: number,
@@ -28,6 +30,7 @@ local profileTemplate:ProfileType = {
 	Level = 0,
 	Xp = 0,
 	Inventory = {},
+	CurrentMask = "",
 	Missions = {},
 	Config = {
 		Codes = {},
