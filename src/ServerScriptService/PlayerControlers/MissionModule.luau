@@ -5,6 +5,7 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local InventoryManager = require(ServerStorage.Services.InventoryMananger)
 local MissionList = require(ServerScriptService.ServerLists.MissionsList)
+local WeekMissionList = require(ReplicatedStorage.ClientServices.ModuleLists.MissionWeekList)
 
 local MissionModule = {}
 
@@ -55,7 +56,7 @@ local function SetMissions(Player: Player): ()
         local missionInfo = MissionList[math.random(1, #MissionList)]
       
         if #playerMissions >= 4 then break end
-        if not HasMission(playerData, missionInfo.MissionID) then break end
+        if not HasMission(playerData, missionInfo.MissionID) then continue end
      
         local missionData = {["MissionID"] = missionInfo.MissionID, ["Progress"] = 0}
         playerData:SetMission(missionData)
@@ -109,9 +110,8 @@ function MissionModule.CheckingMissionsStatus(PlayerID: string, List: {[string]:
 
     for _: number, MissionList: string in MissionsList do
         for index: number, Mission: {[string]: string | number} in PlayerMissionList do
-            if MissionList ~= Mission.MissionID or Mission.Progress == 100 then continue end
-            -- TODO: Criar a função de soma do valor para ser de 0 a 100
-            PlayerData:SetProcress(index, List.Value) 
+            if MissionList ~= Mission.MissionID or Mission.Progress >= WeekMissionList[Mission.MissionID].Total_Mission then continue end
+            PlayerData:SetProcress(index, List.Value)
         end
     end
 end
