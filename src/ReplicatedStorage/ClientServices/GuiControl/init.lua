@@ -38,6 +38,10 @@ local function ResetSizeIcons(Player: Player): ()
 
 	for _, Frame: Frame in HudFrames do
 		for _, Iten in Frame:GetChildren() do
+			if Iten:IsA("ImageButton") and Iten.Name == "ConfigBottom" then
+				Iten.Size = TextBottons.ConfigBottom.OriginalBottomSize
+				continue
+			end
 			if Iten:IsA("ImageButton") then
 				Iten.Size = OriginalBottomSize
 			elseif Iten:IsA("TextLabel") then
