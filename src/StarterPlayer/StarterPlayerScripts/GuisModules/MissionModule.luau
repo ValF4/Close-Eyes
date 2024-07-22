@@ -7,6 +7,10 @@ local MissionWeekList = require(ReplicatedStorage.ClientServices.ModuleLists.Mis
 
 local GetMissions = Bridgnet2.ReferenceBridge("GET_MISSIONS")
 
+function updateProgressBar()
+    
+end
+
 function MissionModule.init(Player: Player)
     local PlayerGui = Player.PlayerGui
     local GameGuis: Folder = PlayerGui:WaitForChild("GAME_GUIS")
@@ -18,15 +22,19 @@ function MissionModule.init(Player: Player)
 
     local MissionList = GetMissions:InvokeServerAsync(Player)
 
+    local function GetProcress(MissionProcress: number, PlayerProcress: number): number
+        return math.floor(MissionProcress / PlayerProcress) * 100
+    end
+    
     for _, Mission in MissionList do
         local GetMissionInfos = MissionWeekList[tostring(Mission.MissionID)]
         if not GetMissionInfos then continue end
-        
+
         local MissionTemplate: ImageLabel = Templates.MissionTemplate:Clone()
         MissionTemplate.TitleMission.Text = GetMissionInfos.Name
         MissionTemplate.DescriptionMission.Text = GetMissionInfos.Description
-        MissionTemplate.ProgressBar.Progress.percentage.Text = `{Mission.Progress}%/100%`
-        --MissionTemplate.ProgressBar.Progress.Size = UDim2.fromScale()
+        MissionTemplate.ProgressBar.percentage.Text = `{GetProcress(Mission.Progress, GetMissionInfos.Total_Mission)} / 100%`
+        MissionTemplate.ProgressBar.Progress.Size = UDim2.fromScale(Mission.Progress / GetMissionInfos.Total_Mission, 0.8)
 
         for index, value in GetMissionInfos.Recompenses do
             local RecompenseTemplate: ImageLabel = Templates.RecompenseBackground:Clone()
@@ -40,7 +48,6 @@ function MissionModule.init(Player: Player)
         MissionTemplate.Name = Mission.MissionID
         MissionTemplate.Parent = ScrollingMissions
         MissionTemplate.Visible = true
-        
     end
 
     MainMissionFrame.ExitBottom.MouseButton1Down:Connect(function()
