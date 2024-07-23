@@ -3,9 +3,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
 
+local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local InventoryManager = require(ServerStorage.Services.InventoryMananger)
 local MissionList = require(ServerScriptService.ServerLists.MissionsList)
 local WeekMissionList = require(ReplicatedStorage.ClientServices.ModuleLists.MissionWeekList)
+
+local UpgradeProcressBar = Bridgnet2.ReferenceBridge("UPGRADE_PROCRESS_BAR")
 
 local MissionModule = {}
 
@@ -43,7 +46,7 @@ local MissionsTypes = {
 }
 
 local function HasMission(playerData, missionId): boolean
-    for index, missionInfo in playerData.Missions do
+    for _, missionInfo in playerData.Missions do
       if missionInfo.MissionID == missionId then return false end
     end
     return true
@@ -55,7 +58,7 @@ local function SetMissions(Player: Player): ()
         local playerMissions = playerData.Missions
         local missionInfo = MissionList[math.random(1, #MissionList)]
       
-        if #playerMissions >= 4 then break end
+        if #playerMissions >= MaxMissions then break end
         if not HasMission(playerData, missionInfo.MissionID) then continue end
      
         local missionData = {["MissionID"] = missionInfo.MissionID, ["Progress"] = 0}
@@ -102,7 +105,8 @@ function MissionModule.GetMissions(Player: Player): {string}
 end
 
 function MissionModule.CheckingMissionsStatus(PlayerID: string, List: {[string]: string | number})
-    local PlayerData = InventoryManager:GetInventory(Players:GetPlayerByUserId(PlayerID))
+    local Player: Player = Players:GetPlayerByUserId(PlayerID)
+    local PlayerData = InventoryManager:GetInventory(Player)
     local PlayerMissionList = PlayerData.Missions
     local MissionsList: {[string]: string} = MissionsTypes[List.ReferenceMission]
 
@@ -111,7 +115,9 @@ function MissionModule.CheckingMissionsStatus(PlayerID: string, List: {[string]:
     for _: number, MissionList: string in MissionsList do
         for index: number, Mission: {[string]: string | number} in PlayerMissionList do
             if MissionList ~= Mission.MissionID or Mission.Progress >= WeekMissionList[Mission.MissionID].Total_Mission then continue end
+            
             PlayerData:SetProcress(index, List.Value)
+            UpgradeProcressBar:Fire(Player, {["Player"] = Player, ["Mission"] = Mission})
         end
     end
 end
