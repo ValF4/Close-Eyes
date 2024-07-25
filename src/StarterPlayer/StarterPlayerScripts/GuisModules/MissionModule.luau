@@ -1,6 +1,9 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 local MissionModule = {}
+
+local DefaltTween = TweenInfo.new(.5, Enum.EasingStyle.Linear)
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local MissionWeekList = require(ReplicatedStorage.ClientServices.ModuleLists.MissionWeekList)
@@ -8,7 +11,13 @@ local MissionWeekList = require(ReplicatedStorage.ClientServices.ModuleLists.Mis
 local GetMissions = Bridgnet2.ReferenceBridge("GET_MISSIONS")
 
 local function GetProcress(MissionProcress: number, PlayerProcress: number): number
-    return math.floor(MissionProcress / PlayerProcress) * 100
+    if MissionProcress == 0 then 
+        return MissionProcress
+    elseif PlayerProcress == 0 then
+        return PlayerProcress
+    else
+        return math.floor(MissionProcress / PlayerProcress) * 100   
+    end
 end
 
 function MissionModule.updateProgressBar(Content: {[string]: string | number})
@@ -26,8 +35,9 @@ function MissionModule.updateProgressBar(Content: {[string]: string | number})
 
     local GetMissionInfos = MissionWeekList[tostring(Content.Mission.MissionID)]
 
+    TweenService:Create(GetMissionFrame.ProgressBar.Progress.Size, DefaltTween, {Size = UDim2.fromScale(Content.Mission.Progress / GetMissionInfos.Total_Mission, 0.8) }):Play()
+
     GetMissionFrame.ProgressBar.percentage.Text = `{GetProcress(Content.Mission.Progress, GetMissionInfos.Total_Mission)} / 100%`
-    GetMissionFrame.ProgressBar.Progress.Size = UDim2.fromScale(Content.Mission.Progress / GetMissionInfos.Total_Mission, 0.8)
 end
 
 function MissionModule.init(Player: Player)
@@ -48,7 +58,7 @@ function MissionModule.init(Player: Player)
         local MissionTemplate: ImageLabel = Templates.MissionTemplate:Clone()
         MissionTemplate.TitleMission.Text = GetMissionInfos.Name
         MissionTemplate.DescriptionMission.Text = GetMissionInfos.Description
-        MissionTemplate.ProgressBar.percentage.Text = `{GetProcress(Mission.Progress, GetMissionInfos.Total_Mission)} / 100%`
+        MissionTemplate.ProgressBar.percentage.Text = `{GetProcress(GetMissionInfos.Total_Mission, Mission.Progress)} / 100%`
         MissionTemplate.ProgressBar.Progress.Size = UDim2.fromScale(Mission.Progress / GetMissionInfos.Total_Mission, 0.8)
 
         for index, value in GetMissionInfos.Recompenses do
