@@ -10,7 +10,7 @@ local MissionWeekList = require(ReplicatedStorage.ClientServices.ModuleLists.Mis
 
 local GetMissions = Bridgnet2.ReferenceBridge("GET_MISSIONS")
 
-local FullProcessSize = UDim2.fromScale(0.9, 0.8)
+local FullProcessSize = UDim2.fromScale(0.99, 0.8)
 
 local function GetProcress(MissionProcress: number, PlayerProcress: number): number
     if MissionProcress == 0 then 
@@ -22,9 +22,12 @@ local function GetProcress(MissionProcress: number, PlayerProcress: number): num
     end
 end
 
-local function sizeUpdateBar(PlayerProcess: number, TotalSize: number): UDim2
-    if PlayerProcess >= TotalSize then return FullProcessSize end
-    return UDim2.fromScale(PlayerProcess / TotalSize, 0.8)
+local function sizeUpdateBar(TotalSize: number, PlayerProcess: number): UDim2
+    print(PlayerProcess, TotalSize)
+    if PlayerProcess <= TotalSize then
+        return UDim2.fromScale(PlayerProcess / TotalSize, 0.8)
+    else
+        return FullProcessSize end
 end
 
 function MissionModule.updateProgressBar(Content: {[string]: string | number})
@@ -66,8 +69,7 @@ function MissionModule.init(Player: Player)
         MissionTemplate.TitleMission.Text = GetMissionInfos.Name
         MissionTemplate.DescriptionMission.Text = GetMissionInfos.Description
         MissionTemplate.ProgressBar.percentage.Text = `{GetProcress(GetMissionInfos.Total_Mission, Mission.Progress)} / 100%`
-        print(sizeUpdateBar(GetMissionInfos.Total_Mission, Mission.Progress))
-        --MissionTemplate.ProgressBar.Progress.Size = sizeUpdateBar(GetMissionInfos.Total_Mission, Mission.Progress)
+        MissionTemplate.ProgressBar.Progress.Size = sizeUpdateBar(GetMissionInfos.Total_Mission, Mission.Progress)
 
         for index, value in GetMissionInfos.Recompenses do
             local RecompenseTemplate: ImageLabel = Templates.RecompenseBackground:Clone()
