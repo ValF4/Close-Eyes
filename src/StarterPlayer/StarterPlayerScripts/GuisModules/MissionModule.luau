@@ -10,14 +10,21 @@ local MissionWeekList = require(ReplicatedStorage.ClientServices.ModuleLists.Mis
 
 local GetMissions = Bridgnet2.ReferenceBridge("GET_MISSIONS")
 
+local FullProcessSize = UDim2.fromScale(0.9, 0.8)
+
 local function GetProcress(MissionProcress: number, PlayerProcress: number): number
     if MissionProcress == 0 then 
         return MissionProcress
     elseif PlayerProcress == 0 then
         return PlayerProcress
     else
-        return math.floor(MissionProcress / PlayerProcress) * 100   
+        return math.floor(MissionProcress / PlayerProcress) * 100
     end
+end
+
+local function sizeUpdateBar(PlayerProcess: number, TotalSize: number): UDim2
+    if PlayerProcess >= TotalSize then return FullProcessSize end
+    return UDim2.fromScale(PlayerProcess / TotalSize, 0.8)
 end
 
 function MissionModule.updateProgressBar(Content: {[string]: string | number})
@@ -35,7 +42,7 @@ function MissionModule.updateProgressBar(Content: {[string]: string | number})
 
     local GetMissionInfos = MissionWeekList[tostring(Content.Mission.MissionID)]
 
-    TweenService:Create(GetMissionFrame.ProgressBar.Progress.Size, DefaltTween, {Size = UDim2.fromScale(Content.Mission.Progress / GetMissionInfos.Total_Mission, 0.8) }):Play()
+    TweenService:Create(GetMissionFrame.ProgressBar.Progress.Size, DefaltTween, {Size = sizeUpdateBar(Content.Mission.Progress, GetMissionInfos.Total_Mission)}):Play()
 
     GetMissionFrame.ProgressBar.percentage.Text = `{GetProcress(Content.Mission.Progress, GetMissionInfos.Total_Mission)} / 100%`
 end
@@ -59,7 +66,8 @@ function MissionModule.init(Player: Player)
         MissionTemplate.TitleMission.Text = GetMissionInfos.Name
         MissionTemplate.DescriptionMission.Text = GetMissionInfos.Description
         MissionTemplate.ProgressBar.percentage.Text = `{GetProcress(GetMissionInfos.Total_Mission, Mission.Progress)} / 100%`
-        MissionTemplate.ProgressBar.Progress.Size = UDim2.fromScale(Mission.Progress / GetMissionInfos.Total_Mission, 0.8)
+        print(sizeUpdateBar(GetMissionInfos.Total_Mission, Mission.Progress))
+        --MissionTemplate.ProgressBar.Progress.Size = sizeUpdateBar(GetMissionInfos.Total_Mission, Mission.Progress)
 
         for index, value in GetMissionInfos.Recompenses do
             local RecompenseTemplate: ImageLabel = Templates.RecompenseBackground:Clone()
