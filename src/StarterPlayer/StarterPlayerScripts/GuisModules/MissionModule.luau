@@ -18,7 +18,7 @@ local function GetProcress(MissionProcress: number, PlayerProcress: number): num
     elseif PlayerProcress == 0 then
         return PlayerProcress
     else
-        return math.floor(MissionProcress / PlayerProcress) * 100
+        return math.floor((MissionProcress / PlayerProcress) * 100)
     end
 end
 
@@ -67,7 +67,7 @@ function MissionModule.init(Player: Player)
         local MissionTemplate: ImageLabel = Templates.MissionTemplate:Clone()
         MissionTemplate.TitleMission.Text = GetMissionInfos.Name
         MissionTemplate.DescriptionMission.Text = GetMissionInfos.Description
-        MissionTemplate.ProgressBar.percentage.Text = `{GetProcress(GetMissionInfos.Total_Mission, Mission.Progress)} / 100%`
+        MissionTemplate.ProgressBar.percentage.Text = `{GetProcress(Mission.Progress, GetMissionInfos.Total_Mission)} / 100%`
         MissionTemplate.ProgressBar.Progress.Size = sizeUpdateBar(GetMissionInfos.Total_Mission, Mission.Progress)
 
         for index, value in GetMissionInfos.Recompenses do
