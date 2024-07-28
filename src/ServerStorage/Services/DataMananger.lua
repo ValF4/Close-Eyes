@@ -29,7 +29,11 @@ local profileTemplate:ProfileType = {
 	GoldemBottom = 0,
 	Level = 0,
 	Xp = 0,
-	Inventory = {},
+	Inventory = {
+		Products = {},
+		Masks = {},
+		Gifts = {},
+	},
 	CurrentMask = "",
 	Missions = {},
 	Config = {

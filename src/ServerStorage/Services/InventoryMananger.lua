@@ -1,4 +1,3 @@
-
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -30,6 +29,11 @@ function DataMethods:Addxp(Value:number)
 	self.XP += Value
 end
 
+function DataMethods:addlevel(Value:number)
+	if not Value then return end
+	self.Level += Value
+end
+
 function DataMethods:setVersion(Value:string)
 	if not Value then return end
 	self.Config.Version = Value
@@ -45,9 +49,9 @@ function DataMethods:equipMask(Value:string)
 	self.CurrentMask = Value
 end
 
-function DataMethods:setItenInInventory(Value:number)
-	if not Value then warn(`{TITLE_FUNCTION} Valor para adicionar item no inventario não encaminhado.`) return end
-	table.insert(self.Inventory, Value)
+function DataMethods:setItenInInventory(Value:number, Type: string)
+	if not Value or Type then warn(`{TITLE_FUNCTION} Valor para adicionar item no inventario não encaminhado.`) return end
+	table.insert(self.Inventory[Type], Value)
 end
 
 function DataMethods:setGoldenBottons(Value:number)
