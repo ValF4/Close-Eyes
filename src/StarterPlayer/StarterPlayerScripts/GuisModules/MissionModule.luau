@@ -23,7 +23,6 @@ local function GetProcress(MissionProcress: number, PlayerProcress: number): num
 end
 
 local function sizeUpdateBar(TotalSize: number, PlayerProcess: number): UDim2
-    print(PlayerProcess, TotalSize)
     if PlayerProcess <= TotalSize then
         return UDim2.fromScale(PlayerProcess / TotalSize, 0.8)
     else

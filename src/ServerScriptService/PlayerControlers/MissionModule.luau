@@ -5,7 +5,6 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
 local InventoryManager = require(ServerStorage.Services.InventoryMananger)
-local MissionList = require(ServerScriptService.ServerLists.MissionsList)
 local WeekMissionList = require(ReplicatedStorage.ClientServices.ModuleLists.MissionWeekList)
 
 local UpgradeProcressBar = Bridgnet2.ReferenceBridge("UPGRADE_PROCRESS_BAR")
@@ -14,6 +13,61 @@ local MissionModule = {}
 
 local WeekSecond: number = 604800
 local MaxMissions: number = 4
+
+local function SetRecompense(Player: Player, Recompense: {[string]: number | {number | string}}): ()
+    if not Player or not Recompense then return end
+    local playerData = InventoryManager:GetInventory(Player)
+    for index: string, item: {} | number in Recompense do
+        if index == "XP" then
+            playerData:Addxp(item)
+        elseif index == "GIFT" then
+            playerData:setItenInInventory(item[2], "Gifts")
+        elseif index == "BROWM_BOTTOM" then
+            playerData:setBrowmBottons(item)
+        else
+            return false
+        end
+    end
+    return true
+end
+
+local recompenseMissionList = {
+    [1] = {
+        MissionID = "MISSION_1",
+        Recompense = function(player) return SetRecompense(player, {XP = 50, GIFT = {1 ,"COMMUN"}}) end
+    },
+
+    [2] = {
+        MissionID = "MISSION_2",
+        Recompense = function(player) return SetRecompense(player, {XP = 150}) end
+    },
+
+    [3] = {
+        MissionID = "MISSION_3",
+        Recompense = function(player) return SetRecompense(player, {BROWM_BOTTOM = 50, XP = 150}) end
+    },
+
+    [4] = {
+        MissionID = "MISSION_4",
+        Recompense = function(player) return SetRecompense(player, {GIFT = {1 ,"COMMUN"}}) end
+    },
+
+    [5] = {
+        MissionID = "MISSION_5",
+        Recompense = function(player) return SetRecompense(player, {GIFT = {1 ,"COMMUN"}, XP = 100 }) end
+    },
+
+    [6] = {
+        MissionID = "MISSION_6",
+        Recompense = function(player) return SetRecompense(player, {XP = 150, BROWM_BOTTOM = 200}) end
+    },
+
+    [7] = {
+        MissionID = "MISSION_7",
+        Recompense = function(player) return SetRecompense(player, {GIFT = {1 ,"COMMUN"}}) end
+    },
+
+}
 
 local MissionsTypes = {
     ["GoldemCollet"] = {
@@ -56,12 +110,12 @@ local function SetMissions(Player: Player): ()
     while task.wait() do
         local playerData = InventoryManager:GetInventory(Player)
         local playerMissions = playerData.Missions
-        local missionInfo = MissionList[math.random(1, #MissionList)]
+        local missionInfo = recompenseMissionList[math.random(1, #recompenseMissionList)]
       
         if #playerMissions >= MaxMissions then break end
         if not HasMission(playerData, missionInfo.MissionID) then continue end
      
-        local missionData = {["MissionID"] = missionInfo.MissionID, ["Progress"] = 0}
+        local missionData = {["MissionID"] = missionInfo.MissionID, ["Progress"] = 0, ["received"] = false}
         playerData:SetMission(missionData)
 
     end
@@ -110,14 +164,22 @@ function MissionModule.CheckingMissionsStatus(PlayerID: string, List: {[string]:
     local PlayerMissionList = PlayerData.Missions
     local MissionsList: {[string]: string} = MissionsTypes[List.ReferenceMission]
 
-    if not MissionList then return end
+    if not MissionsList then return end
 
     for _: number, MissionList: string in MissionsList do
         for index: number, Mission: {[string]: string | number} in PlayerMissionList do
             if MissionList ~= Mission.MissionID or Mission.Progress >= WeekMissionList[Mission.MissionID].Total_Mission then continue end
-            
-            PlayerData:SetProcress(index, List.Value)
+            PlayerData:SetProcress(index, (List.Value + Mission.Progress))
             UpgradeProcressBar:Fire(Player, {["Player"] = Player, ["Mission"] = Mission})
+            local ResquestPlayerInventory = InventoryManager:GetInventory(Player)
+            if ResquestPlayerInventory.Missions[index].Progress >= WeekMissionList[Mission.MissionID].Total_Mission and ResquestPlayerInventory.Missions[index].received == false then
+                for _: number, Func: {[string]: string} in recompenseMissionList do
+                    if Func.MissionID == Mission.MissionID then
+                        local setRecompense = Func.Recompense(Player)
+                        if setRecompense == true then ResquestPlayerInventory:setReceived(index, true) end
+                    end
+                end
+            end
         end
     end
 end

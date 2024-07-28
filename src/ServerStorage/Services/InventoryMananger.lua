@@ -26,7 +26,7 @@ end]]
 
 function DataMethods:Addxp(Value:number)
 	if not Value then return end
-	self.XP += Value
+	self.Xp += Value
 end
 
 function DataMethods:addlevel(Value:number)
@@ -50,13 +50,23 @@ function DataMethods:equipMask(Value:string)
 end
 
 function DataMethods:setItenInInventory(Value:number, Type: string)
-	if not Value or Type then warn(`{TITLE_FUNCTION} Valor para adicionar item no inventario não encaminhado.`) return end
+	if not Value or not Type then warn(`{TITLE_FUNCTION} Valor para adicionar item no inventario não encaminhado.`) return end
 	table.insert(self.Inventory[Type], Value)
 end
 
 function DataMethods:setGoldenBottons(Value:number)
 	if not Value then warn(`{TITLE_FUNCTION} Valor para adicionar Goldem Bottom não encaminhado.`) return end
 	self.GoldemBottom += Value
+end
+
+function DataMethods:setBrowmBottons(Value:number)
+	if not Value then warn(`{TITLE_FUNCTION} Valor para adicionar Goldem Bottom não encaminhado.`) return end
+	self.BrowmBottom += Value
+end
+
+function DataMethods:setReceived(index:number, Value: boolean)
+	if not index or not Value then warn(`{TITLE_FUNCTION} Valor para adicionar Goldem Bottom não encaminhado.`) return end
+	self.Missions[index].received = Value
 end
 
 function DataMethods:setLastEntry(Value: number)
