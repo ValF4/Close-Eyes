@@ -22,8 +22,8 @@ function inventoryControler.CheckingNewPlayer(Player: Player): ()
     local PlayerData = InventoryManager:GetInventory(Player)
     if not PlayerData then return end
     if PlayerData.CurrentMask == "" or PlayerData == nil then inventoryControler.ReplaceMask(Player, InitMask) end
-    if table.getn(PlayerData.Inventory) ~= 0 then return end
-    PlayerData:setItenInInventory(InitMask, Player)
+    if table.getn(PlayerData.Inventory.Masks) ~= 0 then return end
+    PlayerData:setItenInInventory(InitMask, "Masks")
     inventoryControler.ReplaceMask(Player, InitMask)
 end
 
