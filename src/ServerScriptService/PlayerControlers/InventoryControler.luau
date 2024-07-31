@@ -40,8 +40,14 @@ function inventoryControler.ReplaceMask(Player: Player, Item: string): ()
     return true
 end
 
-function inventoryControler.GetInventory(Player: Player): {} return InventoryManager:GetInventory(Player).Inventory end
+function inventoryControler.GetInventory(Player: Player, InventoryType: string): {}
+    if InventoryType == "MASK" then
+        return InventoryManager:GetInventory(Player).Inventory.Masks
+    elseif InventoryType == "GIFT" then
+        return InventoryManager:GetInventory(Player).Inventory.Gifts
+    end
+end
 
-function inventoryControler.CurrentMask(Player: Player) print(InventoryManager:GetInventory(Player).CurrentMask) return InventoryManager:GetInventory(Player).CurrentMask end
+function inventoryControler.CurrentMask(Player: Player) return InventoryManager:GetInventory(Player).CurrentMask end
 
 return inventoryControler

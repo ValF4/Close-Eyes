@@ -47,9 +47,9 @@ GetCurrentMask.OnServerInvoke = function(Player: Player): ()
     return InventoryModule.CurrentMask(Player)
 end
 
-GetPlayerInventory.OnServerInvoke = function(Player: Player): {}
-    if not Player then return end
-    return InventoryModule.GetInventory(Player)
+GetPlayerInventory.OnServerInvoke = function(Player: Player, InventoryType: string): {}
+    if not Player or not InventoryType then return end
+    return InventoryModule.GetInventory(Player, InventoryType)
 end
 
 GetMissions.OnServerInvoke = function(Player): ()
