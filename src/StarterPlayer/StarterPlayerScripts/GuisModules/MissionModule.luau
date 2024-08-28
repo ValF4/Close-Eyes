@@ -1,5 +1,6 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local MissionModule = {}
 
@@ -85,6 +86,7 @@ function MissionModule.init(Player: Player)
     end
 
     MainMissionFrame.ExitBottom.MouseButton1Down:Connect(function()
+        SoundService:PlayLocalSound(SoundService.Guisounds.Press) 
         for _, Iten: ImageLabel | UIListLayout in ScrollingMissions:GetChildren() do
             if Iten:IsA("ImageLabel") then Iten:Destroy() end
         end

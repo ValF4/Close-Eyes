@@ -1,6 +1,7 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 
 local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
@@ -49,6 +50,7 @@ local function NoticePurchaseNotification(Content: {number | boolean})
         TweenService:Create(FailSecureFrame, timeInitAnimation, {Position = GUI_IN_SCREEM}):Play()
 
         FailBackground.ConfirmBottom.MouseButton1Down:Connect(function()
+            SoundService:PlayLocalSound(SoundService.Guisounds.Press)
             TweenService:Create(FailSecureFrame, timeInitAnimation, {Position = GUI_OFF_SCREEM}):Play()
         end)
     end
@@ -92,6 +94,7 @@ function GoldemStore.init(Player: Player)
     end
 
     CloseBottom.MouseButton1Down:Connect(function()
+        SoundService:PlayLocalSound(SoundService.Guisounds.Press)
         for _, Iten: Frame in ConfirmFolder:GetChildren() do
             if Iten.Position == GUI_IN_SCREEM then
                 Iten.Position = GUI_OFF_SCREEM

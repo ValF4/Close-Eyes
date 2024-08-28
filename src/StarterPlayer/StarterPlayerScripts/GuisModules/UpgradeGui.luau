@@ -1,6 +1,7 @@
 local Players           = game:GetService("Players")
 local ReplicatedFirst   = game:GetService("ReplicatedFirst")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 local TweenService      = game:GetService("TweenService")
 
 local Player: Player = Players.LocalPlayer
@@ -69,6 +70,7 @@ function upgradeGui.InitGui(Content: {string}): ()
     end)
 
     CloseBottom.MouseButton1Click:Connect(function()
+        SoundService:PlayLocalSound(SoundService.Guisounds.Press)
         local InitLeaveAnimation = TweenService:Create(BackgroundUpgradeGui, DefaltAnimation, {Position = UDim2.fromScale(0.5, 2)})
         InitLeaveAnimation:Play()
         InitLeaveAnimation.Completed:Connect(function()

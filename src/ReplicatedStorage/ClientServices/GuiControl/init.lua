@@ -1,4 +1,5 @@
 local ReplicatedFirst = game:GetService("ReplicatedFirst")
+local SoundService = game:GetService("SoundService")
 local StarterPlayer = game:GetService("StarterPlayer")
 local TweenService = game:GetService("TweenService")
 
@@ -194,6 +195,7 @@ function GuiControl:init(Player: Player): ()
 				end)
 
 				Bottom.MouseButton1Up:Connect(function()
+					SoundService:PlayLocalSound(SoundService.Guisounds.Press) 
 					directionGui(Bottom.Name)
 				end)
 

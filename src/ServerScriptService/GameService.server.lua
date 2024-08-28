@@ -27,6 +27,7 @@ local GetPlayerInventory = Bridgnet2.ServerBridge("GET_INVENTORY")
 local GetMissions = Bridgnet2.ServerBridge("GET_MISSIONS")
 local EquipItem = Bridgnet2.ServerBridge("EQUIP_ITEM")
 local GetCurrentMask = Bridgnet2.ServerBridge("GET_CURRENT_MASK")
+local GiftOpen = Bridgnet2.ServerBridge("GIFT_OPEN")
 
 DataManager.Init()
 InitMarksServices.InitMarks()
@@ -37,12 +38,16 @@ GameFunctions.benchinit()
 TeleportPlayerEvent:Connect(function(Player: Player, Coords: Vector3): () CharacterControler.TeleportService(Player, Coords) end)
 AnchoredPlayerEvent:Connect(function(Player: Player, State: boolean): () CharacterControler.AnchoredCharacterControler(Player, State) end)
 
-EquipItem.OnServerInvoke = function(Player:Player , Item: string): ()
+GiftOpen.OnServerInvoke = function(Player: Player, index: number): {[string]: {}}
+    return InventoryModule.openGift(Player, index)
+end
+
+EquipItem.OnServerInvoke = function(Player:Player , Item: string): string
     if not Player or not Item then return end
     return InventoryModule.ReplaceMask(Player, Item)
 end
 
-GetCurrentMask.OnServerInvoke = function(Player: Player): ()
+GetCurrentMask.OnServerInvoke = function(Player: Player): string
     if not Player then return end
     return InventoryModule.CurrentMask(Player)
 end

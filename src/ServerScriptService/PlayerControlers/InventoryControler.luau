@@ -1,7 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
 
-local Bridgnet2 = require(ReplicatedStorage.Packages.BridgeNet2)
+local luckModule = require(ServerScriptService.PlayerControlers.giftSystem)
 local InventoryManager = require(ServerStorage.Services.InventoryMananger)
 
 local MODULE_NAME: string = "[Inventory Controler]"
@@ -40,12 +40,23 @@ function inventoryControler.ReplaceMask(Player: Player, Item: string): ()
     return true
 end
 
-function inventoryControler.GetInventory(Player: Player, InventoryType: string): {}
+function inventoryControler.GetInventory(Player: Player, InventoryType: string): string
     if InventoryType == "MASK" then
         return InventoryManager:GetInventory(Player).Inventory.Masks
     elseif InventoryType == "GIFT" then
         return InventoryManager:GetInventory(Player).Inventory.Gifts
     end
+end
+
+function inventoryControler.openGift(Player: Player, gift: string): {[string]: {}}
+    local PlayerData = InventoryManager:GetInventory(Player)
+    if not PlayerData then return end
+    
+    local Gifts = luckModule.init(PlayerData.luck, gift)
+    if not Gifts then warn(`{MODULE_NAME} - Gift generetor error (return nil or false).`) return end
+    --PlayerData:removeGiftInInventory(index)
+    
+    return Gifts
 end
 
 function inventoryControler.CurrentMask(Player: Player) return InventoryManager:GetInventory(Player).CurrentMask end

@@ -7,11 +7,17 @@ local ProfileService = require(ServerStorage.ServerPackages.ProfileService)
 local module = {}
 
 export type ProfileType = {
+	lastEntry: number,
+	luck: number, 
 	BrowmBottom:number,
 	GoldemBottom:number,
 	Level: number,
 	Xp: number,
-	Inventory:{[string]:{}},
+	Inventory:{
+		Products: {},
+		Masks: {},
+		Gifts: {}
+	},
 	CurrentMask: string,
 	Missions: {string},
 	Config:{
@@ -25,6 +31,7 @@ export type ProfileType = {
 
 local profileTemplate:ProfileType = {
 	lastEntry = 0,
+	luck = 3,
 	BrowmBottom = 0,
 	GoldemBottom = 0,
 	Level = 0,

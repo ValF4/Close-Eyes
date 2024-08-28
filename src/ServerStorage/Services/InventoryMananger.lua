@@ -54,6 +54,11 @@ function DataMethods:setItenInInventory(Value:number, Type: string)
 	table.insert(self.Inventory[Type], Value)
 end
 
+function DataMethods:removeGiftInInventory(index:number)
+	if not index then warn(`{TITLE_FUNCTION} Valor para remover o item dos presentes não encaminhado.`) return end
+	table.remove(self.Inventory.Gifts, index)
+end
+
 function DataMethods:setGoldenBottons(Value:number)
 	if not Value then warn(`{TITLE_FUNCTION} Valor para adicionar Goldem Bottom não encaminhado.`) return end
 	self.GoldemBottom += Value
