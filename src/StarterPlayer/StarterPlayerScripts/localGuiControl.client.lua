@@ -7,6 +7,7 @@ local HudModule             = require(PlayerScript.GuisModules.HudModule)
 local TimeControler         = require(PlayerScript.GuisModules.TimeControler)
 local UpgradeGui            = require(PlayerScript.GuisModules.UpgradeGui)
 local MissionModule         = require(PlayerScript.GuisModules.MissionModule)
+local playerMachanics       = require(PlayerScript.clientFunctions.playerMechanics)
 
 local Bridgnet2             = require(ReplicatedStorage.Packages.BridgeNet2)
 
@@ -18,4 +19,5 @@ UpgradeProcressBar:Connect(function(Content: string): () MissionModule.updatePro
 
 GuiControl:init(Player)
 HudModule:init(Player)
+playerMachanics.init(Player)
 TimeControler.init()
