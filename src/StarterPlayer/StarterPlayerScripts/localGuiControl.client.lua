@@ -17,7 +17,8 @@ local UpgradeProcressBar    = Bridgnet2.ClientBridge("UPGRADE_PROCRESS_BAR")
 exchangeVersion:Connect(function(Content: {string}): () UpgradeGui.InitGui(Content) end)
 UpgradeProcressBar:Connect(function(Content: string): () MissionModule.updateProgressBar(Content) end)
 
+playerMachanics.init(Player)
 GuiControl:init(Player)
 HudModule:init(Player)
-playerMachanics.init(Player)
 TimeControler.init()
+

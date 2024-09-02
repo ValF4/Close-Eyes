@@ -6,78 +6,103 @@ local animations: Folder
 local maskInput: Enum.KeyCode = Enum.KeyCode.F
 local squatinput: Enum.KeyCode = Enum.KeyCode.G
 
-local debounce: boolean = false
+local debounce: boolean
 
 local MODULE_NAME: string = "[Player Mechanics - LOCAL]"
 
+local squatStatusName: string = "squatStatus"
+local maskStatusName: string = "maskStatus"
+
 local playerMachines = {}
-local mask: boolean = false
 
-function playerMachines.maskAnimationManager(character: Model): ()
-    if not character then warn(`{MODULE_NAME} - Character sent by playerMachines.squatAnimation is nil.`) return end
-    
-    local function addMask(humanoid: Humanoid): ()
-        local maskAddAnimation: Animation = animations.maskAdd
-        if not maskAddAnimation then warn(`{MODULE_NAME} - maskAdd not found`) return end
-        local track: Animator = humanoid:WaitForChild("Animator"):LoadAnimation(maskAddAnimation)
-        print(track)
+function playerMachines.animationManager(character: Model, animationType: string): ()
+    local function startAnimation(humanoid: Humanoid, animationName: string): ()
+		assert(humanoid and animationType, `{MODULE_NAME} - Humanoid não foi enviado como parametro para a função addMask.`)
+		local animation: Animation = animations[animationName]
+        assert(animation, `{MODULE_NAME} - maskAdd not found`)
+        local track: Animator = humanoid:WaitForChild("Animator"):LoadAnimation(animation)
+        track:Play()
     end
 
-    local function removeMask(humanoid: Humanoid): ()
-        local maskRemoveAnimation: Animation = animations.maskRemove
-        if not maskRemoveAnimation then warn(`{MODULE_NAME} - maskRemove not found`) return end
-        local track: Animator = humanoid:WaitForChild("Animator"):LoadAnimation(maskRemoveAnimation)
-        print(track)
-    end
+    assert(character and animationType, `{MODULE_NAME} - Character or animationType sent by playerMachines.squatAnimation is nil.`)
     
     local humanoid: Humanoid = character:FindFirstChild("Humanoid")
 
-    if not humanoid then warn(`{MODULE_NAME} - Error in locating Humanoid in character.`) return end
+    assert(humanoid, `{MODULE_NAME} - Error in locating Humanoid in character.`)
 
-    if mask == true then
-        removeMask()
-        mask = false
-        return false
-    elseif not mask or mask == false then
-        addMask()
-        mask = false
-        return true
+    if animationType == "Mask" then
+        if character:GetAttribute(maskStatusName) == true then
+            startAnimation(humanoid, "maskRemove")
+            character:SetAttribute(maskStatusName, false)
+            return false
+        elseif character:GetAttribute(maskStatusName) == false then
+            startAnimation(humanoid, "maskAdd")
+            character:SetAttribute(maskStatusName, true)
+            return true
+        end
+    end
+
+    if animationType == "Squat" then
+        if character:GetAttribute(maskStatusName) == true then
+            startAnimation(humanoid, "raice")
+            character:SetAttribute(squatStatusName, false)
+            return false
+        elseif character:GetAttribute(maskStatusName) == false then
+            startAnimation(humanoid, "squat")
+            character:SetAttribute(squatStatusName, true)
+            return true
+        else
+            assert(animationType, `{MODULE_NAME} - Animation Type sent `)
+        end
     end
 
 end
 
-function playerMachines.squatAnimation(character: Model): ()
-    return
-end
 
 function playerMachines.init(Player: Player): ()
-    if not Player then return end
-
+	assert(Player, `{MODULE_NAME} = Player não foi enviando como parametro para a função init`)
+	
     startPlayerScript = Player.PlayerScripts
     animations = startPlayerScript:WaitForChild("animations")
 
     local Character: Model = Player.Character or Player.CharacterAdded:Wait()
 
+    if not Character:GetAttribute(maskStatusName) or not Character:GetAttribute("squatStatus") then
+        if not Character:GetAttribute(maskStatusName) then
+            Character:SetAttribute(maskStatusName, false)
+        end
+
+        if not not Character:GetAttribute(squatStatusName) then
+            Character:SetAttribute(squatStatusName, false)
+        end
+        
+    end
+
+    local function processInput(animationType: string)
+        assert(animationType, `{MODULE_NAME} - AnimationType`)
+        if debounce == true then return end
+        debounce = true
+        local initAnimation: boolean = playerMachines.animationManager(Character, animationType)
+        if initAnimation or not initAnimation then debounce = false end
+    end
+
     UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-        if not gameProcessedEvent then return end
 
-        if input.KeyCode == maskInput then
-            if debounce == false then return end
-            debounce = true
-            local initAnimation: boolean = playerMachines.maskAnimationManager(Character)
-            if initAnimation == true then
-                debounce = false
-            end
+		if input.KeyCode == maskInput and not gameProcessedEvent then
+
+
         end
 
-        if input.KeyCode == squatinput then
-            if debounce == false then return end
+		if input.KeyCode == squatinput and not gameProcessedEvent then
+            if debounce == true then return end
             debounce = true
-            local initAnimation: boolean = playerMachines.squatAnimation(Character)
-            if initAnimation == true then
-                debounce = false
-            end
+            local initAnimation: boolean = playerMachines.animationManager(Character, "Squat")
+            if initAnimation or not initAnimation then debounce = false end
         end
+    end)
+
+    Character:GetAttributeChangedSignal(maskStatusName):Connect(function()
+        playerMachines.walkControler(Character:GetAttribute(maskStatusName))
     end)
 end
 --TODO: Localizar o atachmet da mão para setar a mascara na mão do player ao iniciar a animação
